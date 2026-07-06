@@ -1,0 +1,353 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "./metal.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+  Mente Fria — web design system applied over an Eight-Sleep-style layout.
+  World = silver / stainless steel + black + white; one rare cold spark of
+  MF Electric Blue (#001BFF) used only where it earns it (eyebrow rule,
+  hover / active / focus glow, a single CTA accent — never ambient fills).
+  Typography = Aileron (MF's Helvetica-Neue-style grotesque).
+*/
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Brand surface + accent tokens */
+  --color-warm: var(--warm);
+  --color-mist: var(--mist);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-line: var(--line);
+  --color-accent-blue: var(--accent-blue);
+  --color-accent-blue-soft: var(--accent-blue-soft);
+
+  --font-sans: var(--font-aileron), "Helvetica Neue", Helvetica, Arial,
+    ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, monospace;
+  --font-heading: var(--font-sans);
+
+  /* Stainless-steel + chrome surfaces (dominant brand accent) */
+  --color-steel-line: var(--steel-line);
+
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  /* Mente Fria neutrals — silver/steel world */
+  --background: #ffffff;
+  --foreground: #0b0c0e;   /* Ink 900 — headings, dark sections */
+  --warm: #f4f6f8;         /* Silver 50 — section bands, cards */
+  --mist: #eef1f4;         /* cooler light band */
+  --ink: #0b0c0e;
+  --ink-soft: #3a3f45;     /* Graphite 700 — body text */
+  --ink-faint: #a7aeb6;    /* Steel 400 — secondary text, lines */
+  --line: #d9dde2;         /* Silver 200 — hairline borders */
+
+  /* MF Electric Blue — the single, rare accent */
+  --accent-blue: #001bff;
+  --accent-blue-soft: #f0f1ff; /* used only on focus rings, never as fill */
+
+  /* Stainless-steel hairline + brushed-metal gradients */
+  --steel-line: rgba(140, 147, 155, 0.35);
+  --silver-metal: linear-gradient(
+    180deg,
+    #fcfcfd 0%, #dde1e5 16%, #aeb4bb 34%, #8b9199 47%,
+    #c7ccd2 53%, #edeff2 68%, #b9bec4 84%, #9da3aa 100%
+  );
+  --chrome: linear-gradient(135deg, #f1f3f5, #c7ccd2 36%, #9aa1a9 60%, #e2e6ea);
+
+  /* shadcn token mapping → monochrome */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.16 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.16 0 0);
+  --primary: oklch(0.16 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.965 0.002 250);
+  --secondary-foreground: oklch(0.16 0 0);
+  --muted: oklch(0.965 0.002 250);
+  --muted-foreground: oklch(0.45 0 0);
+  --accent: oklch(0.965 0.002 250);
+  --accent-foreground: oklch(0.16 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: #d9dde2;
+  --input: #d9dde2;
+  --ring: #001bff;
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+
+  /* Tighter radius base; cards step up to larger values */
+  --radius: 0.5rem;
+
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.16 0 0);
+  --sidebar-primary: oklch(0.16 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.965 0.002 250);
+  --sidebar-accent-foreground: oklch(0.16 0 0);
+  --sidebar-border: oklch(0.9 0 0);
+  --sidebar-ring: oklch(0.52 0.24 264);
+}
+
+.dark {
+  --background: oklch(0.16 0 0);
+  --foreground: oklch(0.985 0 0);
+  --warm: oklch(0.22 0 0);
+  --mist: oklch(0.24 0 0);
+  --ink: oklch(0.985 0 0);
+  --ink-soft: oklch(0.75 0 0);
+  --ink-faint: oklch(0.62 0.005 285);
+  --line: oklch(1 0 0 / 12%);
+  --accent-blue: oklch(0.62 0.2 264);
+  --accent-blue-soft: oklch(0.3 0.06 264);
+
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.16 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.62 0.2 264);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+  }
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+  }
+  ::selection {
+    background: var(--accent-blue);
+    color: #fff;
+  }
+}
+
+@layer components {
+  /* Outer page container — 1440px max with ~64px gutters (→20px mobile) */
+  .container-edge {
+    width: 100%;
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 4vw, 4rem);
+  }
+
+  /* Narrow reading column ~720px for centered intro copy */
+  .container-prose {
+    width: 100%;
+    max-width: 720px;
+    margin-inline: auto;
+  }
+
+  /* Generous vertical section rhythm: ~112px desktop → ~64px mobile */
+  .section-y {
+    padding-block: clamp(4rem, 8vw, 7rem);
+  }
+
+  /* Editorial display type — Neue-Montreal-like: light weight, tight leading */
+  .display-xl {
+    font-size: clamp(3rem, 9vw, 7.5rem); /* up to ~120px */
+    line-height: 0.98;
+    letter-spacing: -0.01em;
+    font-weight: 400;
+  }
+  .display-lg {
+    font-size: clamp(2.25rem, 5.2vw, 4.5rem); /* up to ~72px */
+    line-height: 1.03;
+    letter-spacing: -0.01em;
+    font-weight: 400;
+  }
+  .display-md {
+    font-size: clamp(2rem, 3.4vw, 3.5rem); /* up to ~56px */
+    line-height: 1.08;
+    letter-spacing: -0.005em;
+    font-weight: 400;
+  }
+  .heading-sm {
+    font-size: clamp(1.5rem, 2.4vw, 2.25rem); /* ~36–44px */
+    line-height: 1.1;
+    font-weight: 400;
+  }
+  .eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--accent-ice, #5b9bd5); /* locked Cloud Design ice-blue accent */
+  }
+  .body-lg {
+    font-size: clamp(1.0625rem, 1.3vw, 1.25rem);
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+
+  /* Pill button shape seen across the site */
+  .btn-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    padding: 0.875rem 1.75rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    transition: transform 0.25s ease, background-color 0.25s ease,
+      color 0.25s ease, opacity 0.25s ease;
+  }
+  .btn-pill:hover {
+    transform: translateY(-1px);
+  }
+
+  /* Primary CTA: solid ink pill with a cold-blue focus/hover glow */
+  .btn-ink {
+    background: var(--ink);
+    color: #fff;
+  }
+  .btn-ink:hover {
+    box-shadow: 0 8px 28px rgba(0, 27, 255, 0.28);
+  }
+  .btn-ink:focus-visible {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 2px;
+  }
+
+  /* Secondary / chip: brushed stainless-steel surface */
+  .surface-steel {
+    background: var(--silver-metal);
+    color: var(--ink);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7),
+      0 1px 2px rgba(0, 0, 0, 0.12);
+  }
+
+  /* Chrome sheen edge for liquid-glass surfaces (nav, cards) */
+  .chrome-edge {
+    border: 1px solid transparent;
+    background:
+      linear-gradient(var(--background), var(--background)) padding-box,
+      var(--chrome) border-box;
+  }
+
+  /* Hairline stainless divider */
+  .steel-divider {
+    height: 1px;
+    background: var(--steel-line);
+    border: 0;
+  }
+}
+
+/* Scroll-reveal: elements fade + rise as they enter the viewport */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Hide scrollbars on horizontal carousels while keeping scroll */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Continuous marquee for the image strip */
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee-x 38s linear infinite;
+}
+.marquee-track:hover .animate-marquee {
+  animation-play-state: paused;
+}

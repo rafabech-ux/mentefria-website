@@ -1,0 +1,296 @@
+import { PageShell } from "@/components/PageShell";
+import {
+  SubHero,
+  SectionHeader,
+  FeatureCards,
+  CTASection,
+} from "@/components/blocks";
+import { FAQ } from "@/components/FAQ";
+import { Reveal } from "@/components/Reveal";
+
+/* -------------------------------------------------------------------------- */
+/* /soporte — Centro de ayuda                                                  */
+/* -------------------------------------------------------------------------- */
+
+const categoryCards = [
+  {
+    title: "Pagos",
+    body: "Aceptamos Visa, Mastercard, Amex, PayPal, Mercado Pago y transferencia bancaria. Hasta 6 MSI con Mercado Pago. Sitio asegurado por Shopify.",
+    tag: "Métodos de pago",
+    tone: "cool" as const,
+  },
+  {
+    title: "Envíos",
+    body: "Entrega a todo México en 3 a 7 días hábiles. Costo: $1,500 MXN (Horizon/Barrel) o $6,000 MXN (MF ONE). Llega en 2 cajas: motor y tina con accesorios.",
+    tag: "Logística",
+    tone: "warm" as const,
+  },
+  {
+    title: "Garantía",
+    body: "6 meses en modelos inflables (Horizon/Barrel) y 1 año en MF ONE por defectos de fabricación. Atención de por vida.",
+    tag: "Cobertura",
+    tone: "cool" as const,
+  },
+  {
+    title: "Mantenimiento",
+    body: "Cambia el agua cada 3-5 semanas; limpia la tina cada 3-4 semanas sin abrasivos ni cloro. Cambia el filtro del motor en cada cambio de agua.",
+    tag: "Cuidado",
+    tone: "warm" as const,
+  },
+  {
+    title: "Servicio técnico",
+    body: "Diagnóstico remoto primero; visita en sitio si es necesario; reemplazo solo cuando no hay otra opción. Equipo disponible 24/7.",
+    tag: "Atención",
+    tone: "ink" as const,
+  },
+  {
+    title: "Contacto",
+    body: "WhatsApp +52 56 1647 1386. Nuestro equipo está disponible 24/7 para resolver cualquier duda o situación.",
+    tag: "24/7",
+    tone: "cool" as const,
+  },
+];
+
+const faqItems = [
+  {
+    q: "¿Cómo funciona la prueba de 30 días?",
+    a: "Prueba Mente Fria por 30 días; si no es la mejor tina helada que has probado, te regresamos tu dinero, sin preguntas.",
+  },
+  {
+    q: "¿Qué cubre la garantía?",
+    a: "Cualquier defecto de fabricación o de materiales: 6 meses en modelos inflables (Horizon/Barrel) y 1 año en MF ONE. No cubre daños por caídas, golpes o uso inadecuado.",
+  },
+  {
+    q: "¿Cada cuánto cambio el agua y los filtros?",
+    a: "El agua puede durar hasta un mes; drena y rellena cada 3 a 5 semanas. Cada cambio de agua requiere cambiar el filtro del motor.",
+  },
+  {
+    q: "¿Necesito hielo?",
+    a: "No. Los motores mantienen la temperatura que programas (hasta 3°C) y filtran el agua continuamente, eliminando la necesidad de comprar hielo.",
+  },
+  {
+    q: "¿Cuánto tarda en llegar y cuánto cuesta el envío?",
+    a: "3 a 7 días hábiles a todo México. $1,500 MXN para Horizon o Barrel, y $6,000 MXN para el MF ONE.",
+  },
+  {
+    q: "¿Qué tan difícil es el montaje?",
+    a: "Sin herramientas: infla la tina, conecta las mangueras al motor, enchufa y llena con agua. Todo listo en 15 a 20 minutos.",
+  },
+  {
+    q: "¿El MF ONE usa motor externo?",
+    a: "No. El MF ONE es all-in-one con chiller integrado (equivalente al Motor Premium). Enfría a 3°C y calienta a 42°C, sin accesorios adicionales.",
+  },
+  {
+    q: "¿Puedo controlar la temperatura desde mi celular?",
+    a: "Sí, monitorea y ajusta la temperatura desde la app móvil para que el agua esté lista cuando la necesites.",
+  },
+];
+
+export default function SoportePage() {
+  return (
+    <PageShell>
+      {/* 1. SubHero */}
+      <SubHero
+        eyebrow="Soporte"
+        title="Centro de Ayuda"
+        subtitle="Todo lo que necesitas saber sobre tu cold plunge Mente Fria."
+        tone="warm"
+      />
+
+      {/* 2. Categorías de ayuda */}
+      <section className="section-y bg-background">
+        <div className="container-edge">
+          <SectionHeader
+            title="¿En qué te ayudamos?"
+            center
+            className="mb-12"
+          />
+          <FeatureCards cards={categoryCards} columns={3} />
+        </div>
+      </section>
+
+      {/* 3. FAQ */}
+      <section className="section-y bg-warm">
+        <div className="container-edge">
+          <SectionHeader
+            title="Preguntas frecuentes"
+            center
+            className="mb-12"
+          />
+          <FAQ items={faqItems} />
+        </div>
+      </section>
+
+      {/* 3.5 Instalación & cuidado — videos reales del sitio original */}
+      <section className="msection panel" id="instalacion">
+        <div className="mwrap">
+          <Reveal className="msection-head">
+            <span className="m-eyebrow accent">Videos oficiales</span>
+            <h2>Instalación y cuidado</h2>
+            <p>
+              Instala tu plunge en 15–20 minutos sin herramientas. Estos son los
+              videos oficiales paso a paso.
+            </p>
+          </Reveal>
+          <div className="grid gap-6 md:grid-cols-3">
+            <Reveal>
+              <div className="overflow-hidden rounded-[14px] bg-[var(--m-graphite)]">
+                <video
+                  src="/videos/original/instalacion-mf-one.mp4"
+                  controls
+                  preload="metadata"
+                  playsInline
+                  className="aspect-video w-full object-cover"
+                />
+              </div>
+              <h3 className="mt-4 text-[17px] font-semibold">Instalación MF ONE</h3>
+              <p className="mt-1 text-[13.5px] text-[var(--fg-muted)]">
+                Del empaque a tu primera inmersión. Conéctalo, llénalo y programa
+                tu temperatura.
+              </p>
+            </Reveal>
+            <Reveal delay={100}>
+              <div className="overflow-hidden rounded-[14px] bg-[var(--m-graphite)]">
+                <video
+                  src="/videos/original/instalacion-motor-pro-premium.mp4"
+                  controls
+                  preload="metadata"
+                  playsInline
+                  className="aspect-video w-full object-cover"
+                />
+              </div>
+              <h3 className="mt-4 text-[17px] font-semibold">
+                Instalación Motor Pro / Premium
+              </h3>
+              <p className="mt-1 text-[13.5px] text-[var(--fg-muted)]">
+                Conecta las mangueras, enchufa y listo. Para MF Horizon y MF
+                Barrel.
+              </p>
+            </Reveal>
+            <Reveal delay={200}>
+              <div className="overflow-hidden rounded-[14px] bg-[var(--m-graphite)]">
+                <iframe
+                  src="https://player.vimeo.com/video/1082020405"
+                  title="Cuida tu MF Plunge"
+                  allow="fullscreen; picture-in-picture"
+                  allowFullScreen
+                  className="aspect-video w-full"
+                />
+              </div>
+              <h3 className="mt-4 text-[17px] font-semibold">Cuida tu MF Plunge</h3>
+              <p className="mt-1 text-[13.5px] text-[var(--fg-muted)]">
+                Agua cada 3–5 semanas, filtro en cada cambio, limpieza sin
+                abrasivos ni cloro.
+              </p>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Contáctanos */}
+      <section className="section-y bg-background">
+        <div className="container-edge">
+          <div className="grid gap-12 lg:grid-cols-2 lg:gap-20 lg:items-start">
+            {/* Left */}
+            <Reveal>
+              <SectionHeader
+                title="¿No encontraste lo que buscabas?"
+                subtitle="Nuestro equipo está disponible 24/7. Cuéntanos qué necesitas y lo resolvemos juntos."
+              />
+            </Reveal>
+
+            {/* Right — contact card */}
+            <Reveal delay={120}>
+              <div className="rounded-3xl border border-line bg-warm p-8 space-y-6">
+                {/* WhatsApp */}
+                <div className="flex items-start gap-4">
+                  <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-background border border-line">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="h-5 w-5 text-foreground"
+                      aria-hidden="true"
+                    >
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                      <path
+                        fillRule="evenodd"
+                        d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.657 1.438 5.168L2.051 21.95l4.902-1.374A9.944 9.944 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.944 7.944 0 01-4.053-1.107l-.29-.173-3.01.843.852-2.93-.19-.301A7.944 7.944 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-foreground">WhatsApp</p>
+                    <p className="mt-0.5 text-sm text-ink-soft">+52 56 1647 1386</p>
+                    <p className="mt-0.5 text-xs text-ink-soft">Disponible 24/7</p>
+                  </div>
+                </div>
+
+                {/* Correo */}
+                <div className="flex items-start gap-4">
+                  <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-background border border-line">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="h-5 w-5 text-foreground"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-foreground">Correo</p>
+                    <p className="mt-0.5 text-sm text-ink-soft">soporte@mentefria.com</p>
+                    <p className="mt-0.5 text-xs text-ink-soft">Te respondemos en menos de 24 h</p>
+                  </div>
+                </div>
+
+                {/* Horario */}
+                <div className="flex items-start gap-4">
+                  <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-background border border-line">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="h-5 w-5 text-foreground"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-foreground">Horario de atención</p>
+                    <p className="mt-0.5 text-sm text-ink-soft">24/7</p>
+                    <p className="mt-0.5 text-xs text-ink-soft">Cobertura técnica nacional</p>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. CTA dark */}
+      <CTASection
+        title="¿Listo para empezar?"
+        body="Encuentra la tina de agua fría que se adapta a tu rutina y espacio."
+        cta={{ label: "Ver productos", href: "/productos" }}
+        dark
+      />
+    </PageShell>
+  );
+}

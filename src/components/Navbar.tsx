@@ -1,0 +1,196 @@
+"use client";
+
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { nav } from "@/lib/content";
+import { CartIcon, SearchIcon } from "@/components/icons";
+import { Logo } from "@/components/Logo";
+
+/*
+  Liquid-glass nav (ported from Claude Design site_v2, glass = "Medio").
+  Sticky, chrome-frosted gradient + heavy backdrop blur, rounded bottom
+  corners. Layout: left links · centered MENTE FRIA lockup · account /
+  search / cart. Dropdowns preserved for Productos & Soporte.
+*/
+
+/* WHOOP-style mega-menu cards for "Productos" */
+/* width = tamaño relativo real (ONE 200 cm · Horizon 160 cm · Barrel Ø90 cm) */
+const MEGA_PRODUCTS = [
+  {
+    name: "MF ONE",
+    img: "/images/prod-mfone.png",
+    blurb: "All-in-one con chiller integrado. La experiencia completa.",
+    href: "/productos/mf-one",
+    scale: "100%",
+  },
+  {
+    name: "MF HORIZON",
+    img: "/images/prod-horizon.png",
+    blurb: "Inflable premium horizontal. Frío serio, a tu manera.",
+    href: "/productos/mf-horizon",
+    scale: "82%",
+  },
+  {
+    name: "MF BARREL",
+    img: "/images/prod-barrel.png",
+    blurb: "El barril de inmersión clásico. Compacto y poderoso.",
+    href: "/productos/mf-barrel",
+    scale: "55%",
+  },
+];
+
+const MEGA_LINKS = [
+  { label: "Explora todos los plunges", href: "/productos", strong: true },
+  { label: "Accesorios y motores", href: "/accesorios" },
+  { label: "Para negocios", href: "/#b2b" },
+  { label: "Prueba de 30 días", href: "/soporte" },
+];
+
+export function Navbar({ solid: _solid = false }: { solid?: boolean }) {
+  const itemBase = "nl";
+
+  return (
+    <header className="sticky top-0 z-50">
+      <nav className="glass-nav grid grid-cols-[1fr_auto_1fr] items-center px-[clamp(18px,4vw,44px)] py-[13px]">
+        {/* Left: primary links */}
+        <ul className="hidden items-center gap-[clamp(16px,2vw,30px)] lg:flex">
+          {nav.links.map((l) =>
+            l.label === "Productos" ? (
+              /* WHOOP-style mega-menu */
+              <li key={l.label} className="group static">
+                <Link
+                  href={l.href}
+                  className={cn(itemBase, "inline-flex items-center gap-1")}
+                >
+                  {l.label}
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    className="h-3 w-3 transition-transform duration-200 group-hover:rotate-180"
+                  >
+                    <path
+                      d="M6 9l6 6 6-6"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </Link>
+                <div className="invisible absolute inset-x-0 top-full z-50 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                  <div className="mx-auto grid w-[min(960px,94vw)] grid-cols-[1fr_1fr_1fr_auto] gap-5 rounded-2xl border border-line bg-background p-6 text-foreground shadow-[0_24px_64px_rgba(8,9,11,0.24)]">
+                    {MEGA_PRODUCTS.map((p) => (
+                      <Link key={p.name} href={p.href} className="group/card block">
+                        <div className="grid aspect-[4/3] place-items-center overflow-hidden rounded-xl bg-white p-4 shadow-[inset_0_0_0_1px_var(--line-1)]">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={p.img}
+                            alt={p.name}
+                            style={{ width: p.scale }}
+                            className="max-h-full object-contain transition-transform duration-500 group-hover/card:scale-[1.05]"
+                          />
+                        </div>
+                        <div className="mt-3 flex items-center justify-between">
+                          <span className="text-[14px] font-semibold tracking-[0.14em]">
+                            {p.name}
+                          </span>
+                          <span aria-hidden className="text-[var(--accent-ice)]">→</span>
+                        </div>
+                        <p className="mt-1 text-[12px] leading-snug text-ink-soft">
+                          {p.blurb}
+                        </p>
+                      </Link>
+                    ))}
+                    <div className="flex min-w-[220px] flex-col gap-1 border-l border-line pl-5">
+                      {MEGA_LINKS.map((m) => (
+                        <Link
+                          key={m.label}
+                          href={m.href}
+                          className={cn(
+                            "flex items-center justify-between gap-4 rounded-lg px-2 py-2.5 text-[13px] transition-colors hover:bg-warm",
+                            m.strong ? "font-semibold" : "text-ink-soft",
+                          )}
+                        >
+                          {m.label}
+                          <span aria-hidden className="text-[var(--accent-ice)]">→</span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </li>
+            ) : l.submenu ? (
+              <li key={l.label} className="group relative">
+                <Link
+                  href={l.href}
+                  className={cn(itemBase, "inline-flex items-center gap-1")}
+                >
+                  {l.label}
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    className="h-3 w-3 transition-transform duration-200 group-hover:rotate-180"
+                  >
+                    <path
+                      d="M6 9l6 6 6-6"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </Link>
+                {/* Dropdown panel */}
+                <div className="invisible absolute left-1/2 top-full z-50 -translate-x-1/2 pt-4 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                  <ul className="min-w-[230px] rounded-2xl border border-line bg-background p-2 text-foreground shadow-[0_14px_44px_rgba(40,46,54,0.22)]">
+                    {l.submenu.map((s) => (
+                      <li key={s.label}>
+                        <Link
+                          href={s.href}
+                          className="block rounded-xl px-4 py-2.5 text-[13px] font-medium tracking-[0.01em] text-ink-soft transition-colors hover:bg-warm hover:text-foreground"
+                        >
+                          {s.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ) : (
+              <li key={l.label}>
+                <Link href={l.href} className={itemBase}>
+                  {l.label}
+                </Link>
+              </li>
+            ),
+          )}
+        </ul>
+        {/* Mobile spacer keeps lockup centered */}
+        <div className="lg:hidden" />
+
+        {/* Center: Mente Fria lockup */}
+        <Link href="/" aria-label="Mente Fria" className="justify-self-center">
+          <Logo variant="black" className="h-7 w-auto" />
+        </Link>
+
+        {/* Right: account · search · cart */}
+        <div className="flex items-center justify-end gap-5 sm:gap-7">
+          <Link href="#" className={cn(itemBase, "hidden md:inline")}>
+            {nav.account}
+          </Link>
+          <Link
+            href="#"
+            className={cn(itemBase, "hidden items-center gap-1.5 sm:inline-flex")}
+          >
+            <span className="hidden lg:inline">{nav.search}</span>
+            <SearchIcon className="h-[15px] w-[15px]" />
+          </Link>
+          <Link href="#" className={cn(itemBase, "inline-flex items-center gap-1.5")}>
+            <span className="hidden lg:inline">{nav.cart}</span>
+            <CartIcon className="h-[15px] w-[15px]" />
+          </Link>
+        </div>
+      </nav>
+    </header>
+  );
+}
