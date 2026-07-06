@@ -29,7 +29,7 @@ const tinas = [
     tagline: "Sistema de 3 filtros + purificación por ozono. Control WiFi programable. Certificación CE. 6 meses de garantía.",
     specs: "160 × 65 × 70 cm · 15 kg",
     price: "$74,000 MXN",
-    image: "/images/prod-horizon.png",
+    image: "/images/prod-horizon-nobg.png",
     href: "/productos/mf-horizon",
     badge: null,
   },
@@ -39,7 +39,7 @@ const tinas = [
     tagline: "Sistema de 3 filtros + purificación por ozono. Control WiFi programable. Certificación CE. 6 meses de garantía.",
     specs: "90 cm diámetro × 90 cm altura · 13 kg",
     price: "$69,000 MXN",
-    image: "/images/prod-barrel.png",
+    image: "/images/prod-barrel-nobg.png",
     href: "/productos/mf-barrel",
     badge: null,
   },
@@ -82,7 +82,7 @@ export default function ProductosPage() {
                 className="group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-[0_1px_2px_rgba(8,9,11,0.06)] transition-shadow duration-500 hover:shadow-[0_24px_48px_-20px_rgba(8,9,11,0.25)]"
               >
                 {/* Image stage — contain, nunca recortada */}
-                <div className="relative grid aspect-[4/3] w-full place-items-center overflow-hidden bg-white p-8">
+                <div className="relative grid aspect-[4/3] w-full place-items-center overflow-hidden bg-[var(--bg-panel)] p-8">
                   <Image
                     src={tina.image}
                     alt={tina.name}

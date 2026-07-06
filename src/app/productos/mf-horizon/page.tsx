@@ -10,6 +10,7 @@ import {
 } from "@/components/blocks";
 import { FAQ } from "@/components/FAQ";
 import { Reveal } from "@/components/Reveal";
+import { ProductOptionsProvider, ProductStage, ColorPicker } from "@/components/ProductOptions";
 import { ArrowRight } from "@/components/icons";
 
 /* ─────────────────────────────────────────────────────────────
@@ -114,20 +115,18 @@ export default function MFHorizonPage() {
       {/* ── 1. PRODUCT HERO ─────────────────────────────────────── */}
       <section className="section-y bg-warm">
         <div className="container-edge">
+          <ProductOptionsProvider
+            variants={[
+              { color: "Negro", images: ["/images/pdp-horizon-negro.png"] },
+              { color: "Blanco", images: ["/images/pdp-horizon-blanco.png"] },
+            ]}
+            defaultColor="Blanco"
+          >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
             {/* LEFT — product stage */}
             <Reveal>
-              <div className="relative rounded-3xl bg-gradient-to-b from-white to-[#e7eaee] p-8 flex items-center justify-center aspect-[4/3] lg:aspect-square overflow-hidden">
-                <Image
-                  src="/images/prod-horizon.png"
-                  alt="MF Horizon — cold plunge inflable portátil"
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="object-contain p-8"
-                />
-              </div>
+              <ProductStage alt="MF Horizon — cold plunge inflable portátil" />
             </Reveal>
 
             {/* RIGHT — copy + CTAs */}
@@ -194,7 +193,10 @@ export default function MFHorizonPage() {
                   </div>
                 </div>
 
-                {/* CTAs */}
+                {/* Color (arriba de los CTAs) */}
+              <ColorPicker />
+
+              {/* CTAs */}
                 <div className="flex flex-wrap gap-4 mb-6">
                   <Link href="#" className="btn-pill btn-ink">
                     Añadir al carrito
@@ -215,6 +217,7 @@ export default function MFHorizonPage() {
               </div>
             </Reveal>
           </div>
+          </ProductOptionsProvider>
         </div>
       </section>
 

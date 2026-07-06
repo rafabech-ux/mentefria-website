@@ -182,7 +182,8 @@
   }
   html {
     @apply font-sans;
-    scroll-behavior: smooth;
+    /* Sin scroll-behavior smooth global: Next anima el scroll-to-top al navegar
+       y parece scroll en la misma página. Smooth solo en anchors via JS. */
   }
   ::selection {
     background: var(--accent-blue);

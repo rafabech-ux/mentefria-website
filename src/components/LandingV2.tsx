@@ -14,7 +14,6 @@ import {
   VolumeX,
   Wifi,
   Wind,
-  X,
 } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 
@@ -29,8 +28,8 @@ const WHATSAPP = "https://wa.me/5215616471386";
 /* ---------- Hotspots (MF ONE specs) ---------- */
 
 const HOTSPOTS = [
-  { left: "14%", icon: Snowflake, k: "01 · Chiller", t: "Enfría a 3 °C", p: "Compresor integrado de grado comercial. Del agua tibia al frío en minutos, sin un solo hielo." },
-  { left: "26%", icon: Flame, k: "02 · Temperatura", t: "Calienta hasta 42 °C", p: "De spa a hielo en la misma tina. Calor para relajar, frío para recuperar, todo el año." },
+  { left: "14%", icon: Snowflake, k: "01 · Chiller", t: "Enfría a 0 °C", p: "Chiller integrado de 3.5 kW, grado comercial. Del agua tibia al frío en minutos, sin un solo hielo." },
+  { left: "26%", icon: Flame, k: "02 · Temperatura", t: "Calienta hasta 40 °C", p: "De spa a hielo en la misma tina. Calor para relajar, frío para recuperar, todo el año." },
   { left: "38%", icon: Filter, k: "03 · Filtración", t: "3 filtros", p: "Sistema de tres filtros con malla de 20 micrones. Agua cristalina sin productos químicos." },
   { left: "50%", icon: Wind, k: "04 · Purificación", t: "Ozono cada 5 min", p: "Purificación por ozono automática. El agua se mantiene limpia sin que muevas un dedo." },
   { left: "62%", icon: Wifi, k: "05 · Control", t: "App WiFi", p: "Programa temperatura y horarios desde tu celular. Tu ritual, listo cuando llegas." },
@@ -41,7 +40,7 @@ const HOTSPOTS = [
 /* ---------- Feature reveal ---------- */
 
 const FEATURES = [
-  { word: "Temperatura", img: "/photography/feature/temperatura.png", copy: "De 3 °C a 42 °C. Frío para recuperar, calor para relajar. Una sola tina para todo el año, ajustable al grado." },
+  { word: "Temperatura", img: "/photography/feature/temperatura.png", copy: "De 0 °C a 40 °C. Frío para recuperar, calor para relajar. Una sola tina para todo el año, ajustable al grado." },
   { word: "Filtración", img: "/photography/feature/filtracion.jpg", copy: "Sistema de 3 filtros más purificación por ozono cada 5 minutos. Filtro de 20 micrones. Agua cristalina sin productos químicos." },
   { word: "Control", img: "/photography/feature/control-app-1049.jpg", copy: "Control total desde la app. Programa temperatura, horarios y tu ritual. El frío te espera listo cuando llegas a casa." },
 ];
@@ -61,22 +60,16 @@ const RAZONES = [
 ];
 
 /* Productos — precios y bullets reales de mentefria.com.
+   Triángulo estilo WHOOP: Barrel (izq, abajo) · MF ONE (centro, ESTELAR) · Horizon (der, abajo).
    scale = tamaño relativo real (ONE 200 cm · Horizon 160 cm · Barrel Ø90 cm) */
 const PRODUCTOS = [
   {
     name: "MF BARREL",
     price: "$69,000",
-    img: "/images/prod-barrel.png",
+    img: "/images/prod-barrel-nobg.png",
     href: "/productos/mf-barrel",
-    scale: "55%",
-    bullets: ["Sistema de 3 filtros + purificación por ozono.", "Control WiFi programable desde tu celular.", "Certificación CE. 6 meses de garantía."],
-  },
-  {
-    name: "MF HORIZON",
-    price: "$74,000",
-    img: "/images/prod-horizon.png",
-    href: "/productos/mf-horizon",
-    scale: "82%",
+    scale: "88%",
+    featured: false,
     bullets: ["Sistema de 3 filtros + purificación por ozono.", "Control WiFi programable desde tu celular.", "Certificación CE. 6 meses de garantía."],
   },
   {
@@ -85,13 +78,24 @@ const PRODUCTOS = [
     img: "/images/prod-mfone.png",
     href: "/productos/mf-one",
     scale: "100%",
+    featured: true,
     bullets: ["Diseño All-In-One con chiller integrado.", "Filtro de 20 micrones + purificación por ozono.", "Control WiFi programable. Certificación CE. 1 año de garantía."],
+  },
+  {
+    name: "MF HORIZON",
+    price: "$74,000",
+    img: "/images/prod-horizon-nobg.png",
+    href: "/productos/mf-horizon",
+    scale: "137%", // col angosta: >100% para tamaño visual ~ONE
+    nudge: "md:translate-x-2 md:-translate-y-1.5",
+    featured: false,
+    bullets: ["Sistema de 3 filtros + purificación por ozono.", "Control WiFi programable desde tu celular.", "Certificación CE. 6 meses de garantía."],
   },
 ];
 
 /* Trust trio — real de mentefria.com */
 const TRUST = [
-  { t: "Amas MENTE FRIA o te reembolsamos", p: "Prueba Mente Fria por 30 días. Si no es la mejor tina helada que has probado, te regresamos tu dinero. Sin preguntas." },
+  { t: "Amas MENTE FRIA o te reembolsamos", p: "Prueba Mente Fria por 30 días. Si no es el mejor cold plunge que has probado, te regresamos tu dinero. Sin preguntas." },
   { t: "Garantía por 1 año", p: "Respaldamos nuestros productos con 6 meses o 1 año de garantía. Y atención de por vida por nuestros medios de comunicación." },
   { t: "Financiamiento disponible", p: "Contamos con hasta 6 meses sin intereses con tarjetas participantes a través de Mercado Pago." },
 ];
@@ -159,12 +163,14 @@ function Counter({
   from = 0,
   suffix,
   duration = 1100,
+  tone,
 }: {
   target: number;
   /** starting value — set above `target` to count DOWN (e.g. 20 → 3 °C) */
   from?: number;
   suffix?: string;
   duration?: number;
+  tone?: "cold" | "heat";
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [val, setVal] = useState(from);
@@ -197,7 +203,7 @@ function Counter({
   }, [target, from, duration]);
 
   return (
-    <div ref={ref} className="n">
+    <div ref={ref} className={`n${tone === "cold" ? " n-cold" : tone === "heat" ? " n-heat" : ""}`}>
       {val}
       {suffix ? <span className="u">{suffix}</span> : null}
     </div>
@@ -210,7 +216,8 @@ export function LandingV2() {
   const [spot, setSpot] = useState<number | null>(0);
   const [feature, setFeature] = useState(0);
   const [featurePaused, setFeaturePaused] = useState(false);
-  const [lightbox, setLightbox] = useState<string | null>(null);
+  /* testimonio reproduciéndose inline (índice de card, uno a la vez) */
+  const [playing, setPlaying] = useState<number | null>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const heroMediaRef = useRef<HTMLDivElement>(null);
 
@@ -244,13 +251,13 @@ export function LandingV2() {
     return () => clearInterval(id);
   }, [featurePaused]);
 
-  /* close lightbox with Esc */
+  /* detener video inline con Esc */
   useEffect(() => {
-    if (!lightbox) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setLightbox(null);
+    if (playing === null) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setPlaying(null);
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [lightbox]);
+  }, [playing]);
 
   const scrollTrack = (dir: 1 | -1) => {
     const track = trackRef.current;
@@ -268,7 +275,7 @@ export function LandingV2() {
           <img src="/photography/hero/mf-one-concrete.png" alt="MF ONE en arquitectura de concreto" />
         </div>
         <div className="mhero-inner mwrap !max-w-none w-full">
-          <div className="m-eyebrow">Wellness para los que valoran su tiempo</div>
+          <div className="m-eyebrow !text-[var(--m-blue-400)] !text-[13px] !font-semibold [text-shadow:0_1px_14px_rgba(8,9,11,0.55)]">Wellness para los que valoran su tiempo</div>
           <h1>
             La cold plunge
             <br />
@@ -425,7 +432,14 @@ export function LandingV2() {
             </table>
           </Reveal>
           <Reveal className="mt-10 text-center">
-            <a href="#productos" className="mbtn mbtn-blue">
+            <a
+              href="#productos"
+              className="mbtn mbtn-blue"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("productos")?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
               Encuentra tu cold plunge
             </a>
           </Reveal>
@@ -433,16 +447,16 @@ export function LandingV2() {
       </section>
 
       {/* ===== TRUST (real de mentefria.com) ===== */}
-      <section className="msection panel !pt-0">
+      <section className="panel !py-0">
         <div className="mwrap">
-          <div className="grid gap-6 pt-[clamp(48px,7vh,90px)] md:grid-cols-3">
+          <div className="grid gap-5 py-[clamp(40px,6vh,64px)] md:grid-cols-3">
             {TRUST.map((t, i) => (
               <Reveal key={t.t} delay={i * 100}>
-                <div className="h-full rounded-[14px] border border-[var(--line-1)] bg-white p-7">
-                  <h3 className="mdisplay text-[19px]" style={{ WebkitTextStroke: "var(--bold-stroke) currentColor" }}>
+                <div className="h-full rounded-[14px] border border-[var(--line-1)] bg-white p-5">
+                  <h3 className="mdisplay text-[17px]" style={{ WebkitTextStroke: "var(--bold-stroke) currentColor" }}>
                     {t.t}
                   </h3>
-                  <p className="mt-3 text-[13.5px] leading-relaxed text-[var(--fg-muted)]">{t.p}</p>
+                  <p className="mt-2 text-[13px] leading-relaxed text-[var(--fg-muted)]">{t.p}</p>
                 </div>
               </Reveal>
             ))}
@@ -457,26 +471,53 @@ export function LandingV2() {
             <span className="m-eyebrow accent">Nuestros plunges</span>
             <h2>Encuentra la cold plunge perfecta para ti.</h2>
           </Reveal>
-          <div className="grid gap-6 md:grid-cols-3">
+        </div>
+        {/* Contenedor ancho: el bloque completo de productos escala ~15% (misma proporción) */}
+        <div className="mx-auto w-[min(1500px,94vw)] px-[clamp(20px,3vw,40px)]">
+          {/* Triángulo WHOOP: MF ONE estelar al centro, laterales más abajo */}
+          <div className="grid gap-8 md:grid-cols-[1fr_1.25fr_1fr] md:items-start">
             {PRODUCTOS.map((p, i) => (
-              <Reveal key={p.name} delay={i * 100}>
+              <Reveal
+                key={p.name}
+                delay={i * 100}
+                className={p.featured ? "relative z-10 md:-mt-6" : "md:mt-14"}
+              >
                 <Link href={p.href} className="group block">
-                  <div className="grid aspect-[4/3] place-items-center overflow-hidden rounded-[14px] bg-white p-6 shadow-[inset_0_0_0_1px_var(--line-1)]">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={p.img}
-                      alt={p.name}
-                      style={{ width: p.scale }}
-                      className="max-h-full object-contain transition-transform duration-500 group-hover:scale-[1.05]"
-                    />
+                  {/* Producto DESBORDÁNDOSE del panel: el panel gris es una capa
+                      detrás, más corta que la imagen — el producto siempre rompe
+                      el marco por arriba (estilo WHOOP). */}
+                  <div className="relative">
+                    {/* Panel gris (capa trasera, arranca al 30% de la altura) */}
+                    <div className={`absolute bottom-0 top-[45%] rounded-[16px] bg-[var(--bg-panel)] ${p.featured ? "inset-x-0" : "-inset-x-5"}`}>
+                      {p.featured && (
+                        <span className="absolute bottom-4 left-4 z-20 rounded-full bg-[var(--m-ink)] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-white">
+                          Más vendido
+                        </span>
+                      )}
+                    </div>
+                    {/* Producto (capa delantera — sin z-index: crearía stacking
+                        context y aislaría el mix-blend del fondo de página) */}
+                    <div
+                      className={`relative flex items-end justify-center px-4 ${
+                        p.featured ? "min-h-[320px] pb-10" : "min-h-[260px] pb-8"
+                      }`}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={p.img}
+                        alt={p.name}
+                        style={{ "--pw": p.scale } as React.CSSProperties}
+                        className={`w-auto max-w-full flex-none object-contain drop-shadow-[0_22px_28px_rgba(8,9,11,0.22)] transition-transform duration-500 group-hover:scale-[1.04] md:w-[var(--pw)] md:!max-w-none ${"nudge" in p && p.nudge ? p.nudge : ""}`}
+                      />
+                    </div>
                   </div>
-                  <div className="mt-5 flex items-baseline justify-between">
-                    <h3 className="mdisplay text-[22px]" style={{ WebkitTextStroke: "var(--bold-stroke) currentColor" }}>
+                  <div className="mt-5">
+                    <h3
+                      className={`mdisplay ${p.featured ? "text-[28px]" : "text-[22px]"}`}
+                      style={{ WebkitTextStroke: "var(--bold-stroke) currentColor" }}
+                    >
                       {p.name}
                     </h3>
-                    <span className="text-[15px] font-semibold">
-                      {p.price} <span className="text-[11px] font-normal text-[var(--fg-muted)]">MXN</span>
-                    </span>
                   </div>
                   <ul className="mt-3 space-y-1.5">
                     {p.bullets.map((b) => (
@@ -485,8 +526,8 @@ export function LandingV2() {
                       </li>
                     ))}
                   </ul>
-                  <span className="mt-4 inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--accent-ice)]">
-                    Comprar ahora <ArrowRight size={14} />
+                  <span className="mt-4 inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--accent-ice)] transition-colors group-hover:text-[var(--m-blue-600)]">
+                    Ver ahora <ArrowRight size={14} />
                   </span>
                 </Link>
               </Reveal>
@@ -501,8 +542,7 @@ export function LandingV2() {
           <div className="stats-wrap">
             <Reveal className="stats-visual">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/photography/product/mf-one-patio.png" alt="MF ONE en patio de concreto" className="!object-cover !p-0" />
-              <div className="glow" />
+              <img src="/photography/product/mf-one-courtyard.png" alt="MF ONE en patio" className="!object-cover !p-0" />
             </Reveal>
             <Reveal>
               <span className="m-eyebrow accent">Por los números</span>
@@ -514,11 +554,11 @@ export function LandingV2() {
               </h2>
               <div className="stats-grid">
                 <div className="stat">
-                  <Counter from={20} target={3} duration={1800} suffix="°C" />
+                  <Counter from={20} target={0} duration={1800} suffix="°C" tone="cold" />
                   <div className="l">Enfría sin fallar, sin un solo hielo.</div>
                 </div>
                 <div className="stat">
-                  <Counter target={42} suffix="°C" />
+                  <Counter target={40} suffix="°C" tone="heat" />
                   <div className="l">Calienta como jacuzzi. Una tina, todo el año.</div>
                 </div>
                 <div className="stat">
@@ -533,7 +573,7 @@ export function LandingV2() {
                 </div>
               </div>
               <div className="mt-8">
-                <Link href="/productos/mf-one" className="mbtn mbtn-chrome">
+                <Link href="/productos/mf-one#ficha-tecnica" className="mbtn mbtn-solid-light">
                   Ver ficha técnica completa
                 </Link>
               </div>
@@ -554,14 +594,25 @@ export function LandingV2() {
             {TESTIMONIALS.map((t, i) => (
               <button
                 key={t.who}
-                className="vcard stagger-i"
+                className={`vcard stagger-i${playing === i ? " playing" : ""}`}
                 style={{ "--i": i } as React.CSSProperties}
-                onClick={() => t.video && setLightbox(t.video)}
-                aria-label={t.video ? `Ver video de ${t.who}` : t.who}
+                onClick={() => t.video && setPlaying(playing === i ? null : i)}
+                aria-label={
+                  t.video
+                    ? playing === i
+                      ? `Detener video de ${t.who}`
+                      : `Ver video de ${t.who}`
+                    : t.who
+                }
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={t.img} alt={t.who} />
-                {t.video && (
+                {playing === i && t.video ? (
+                  /* Reproducción inline — en el mismo frame de la card */
+                  <video src={t.video} autoPlay playsInline onEnded={() => setPlaying(null)} />
+                ) : (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img src={t.img} alt={t.who} />
+                )}
+                {t.video && playing !== i && (
                   <div className="play">
                     <Play size={20} fill="currentColor" />
                   </div>
@@ -684,21 +735,6 @@ export function LandingV2() {
         <MessageCircle size={22} />
       </a>
 
-      {/* ===== VIDEO LIGHTBOX ===== */}
-      {lightbox && (
-        <div className="vlightbox" onClick={() => setLightbox(null)} role="dialog" aria-modal>
-          <button className="close" aria-label="Cerrar" onClick={() => setLightbox(null)}>
-            <X size={20} />
-          </button>
-          <video
-            src={lightbox}
-            controls
-            autoPlay
-            playsInline
-            onClick={(e) => e.stopPropagation()}
-          />
-        </div>
-      )}
     </main>
   );
 }

@@ -25,14 +25,14 @@ const MEGA_PRODUCTS = [
   },
   {
     name: "MF HORIZON",
-    img: "/images/prod-horizon.png",
+    img: "/images/prod-horizon-nobg.png",
     blurb: "Inflable premium horizontal. Frío serio, a tu manera.",
     href: "/productos/mf-horizon",
     scale: "82%",
   },
   {
     name: "MF BARREL",
-    img: "/images/prod-barrel.png",
+    img: "/images/prod-barrel-nobg.png",
     blurb: "El barril de inmersión clásico. Compacto y poderoso.",
     href: "/productos/mf-barrel",
     scale: "55%",
@@ -81,7 +81,7 @@ export function Navbar({ solid: _solid = false }: { solid?: boolean }) {
                   <div className="mx-auto grid w-[min(960px,94vw)] grid-cols-[1fr_1fr_1fr_auto] gap-5 rounded-2xl border border-line bg-background p-6 text-foreground shadow-[0_24px_64px_rgba(8,9,11,0.24)]">
                     {MEGA_PRODUCTS.map((p) => (
                       <Link key={p.name} href={p.href} className="group/card block">
-                        <div className="grid aspect-[4/3] place-items-center overflow-hidden rounded-xl bg-white p-4 shadow-[inset_0_0_0_1px_var(--line-1)]">
+                        <div className="grid aspect-[4/3] place-items-center overflow-hidden rounded-xl bg-[var(--bg-panel)] p-4">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={p.img}

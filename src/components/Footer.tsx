@@ -55,7 +55,7 @@ export function Footer() {
             />
             <button
               type="submit"
-              className="mbtn mbtn-chrome !px-[22px] !py-[14px]"
+              className="mbtn mbtn-blue !px-[22px] !py-[14px]"
               aria-label="Suscribirme"
             >
               →

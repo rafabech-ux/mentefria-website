@@ -210,13 +210,13 @@
 
 /* ===== Stats (dark) ===== */
 .stats-wrap { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
-.stats-visual { position: relative; border-radius: 18px; overflow: hidden; aspect-ratio: 3 / 4; background: var(--grad-steel); }
+.stats-visual { position: relative; border-radius: 18px; overflow: hidden; aspect-ratio: 1 / 1; background: var(--grad-steel); }
 .stats-visual img { width: 100%; height: 100%; object-fit: contain; padding: 8%; }
 .stats-visual .glow { position: absolute; inset: 0; background: var(--grad-ice); }
 .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--on-dark-line); border: 1px solid var(--on-dark-line); border-radius: 14px; overflow: hidden; }
 .stat { background: var(--m-ink); padding: 30px 26px; }
 .stat .n { font-family: var(--font-display); font-weight: 400; font-size: clamp(44px, 6vw, 80px); letter-spacing: -0.04em; line-height: 0.9; background: var(--grad-chrome); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-.stat .n .u { font-size: 0.4em; -webkit-text-fill-color: var(--m-blue-400); }
+.stat .n .u { font-size: 0.4em; -webkit-text-fill-color: rgba(255, 255, 255, 0.65); }
 .stat .l { font-size: 12.5px; color: var(--on-dark-muted); margin-top: 12px; line-height: 1.45; }
 @media (max-width: 880px) { .stats-wrap { grid-template-columns: 1fr; } }
 
@@ -395,4 +395,121 @@
   .stagger-i, .compare tbody tr { opacity: 1 !important; transform: none !important; transition: none !important; }
   .mfeature-media img { transform: none; }
   .mhero-media { transform: none !important; }
+}
+
+/* =====================================================================
+   TEMPERATURA: frío azul / calor rojo (stats + bento)
+   ===================================================================== */
+:root { --m-heat: #e05c45; --m-heat-glow: rgba(224, 92, 69, 0.4); }
+.stat .n.n-cold { background: none; -webkit-text-fill-color: #fff; }
+.stat .n.n-cold .u { -webkit-text-fill-color: var(--m-blue-400); }
+.stat .n.n-heat { background: none; -webkit-text-fill-color: #fff; }
+.stat .n.n-heat .u { -webkit-text-fill-color: #f0967f; }
+
+/* =====================================================================
+   BENTO ANIMADO (PDP MF ONE) — micro-animaciones bespoke por dato técnico
+   ===================================================================== */
+.bento-card { position: relative; overflow: hidden; border-radius: 14px; border: 1px solid var(--line-1); background: var(--m-white); padding: 28px; }
+.bento-card.dark { background: var(--grad-ink); border-color: transparent; color: #fff; }
+.bento-card.dark p { color: var(--on-dark-muted); }
+
+/* ---- 1. FROST: cristales de hielo dibujándose ---- */
+@keyframes frost-draw { to { stroke-dashoffset: 0; } }
+@keyframes frost-glow { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
+.frost-svg path { stroke-dasharray: 240; stroke-dashoffset: 240; }
+.in-view .frost-svg path { animation: frost-draw 2.2s var(--ease-expo) forwards, frost-glow 5s ease-in-out 2.2s infinite; }
+.in-view .frost-svg path:nth-child(2) { animation-delay: 0.25s, 2.4s; }
+.in-view .frost-svg path:nth-child(3) { animation-delay: 0.5s, 2.6s; }
+
+/* barras enfriándose */
+@keyframes bar-freeze { from { transform: scaleY(1); } to { transform: scaleY(var(--bh, 0.4)); } }
+.freeze-bars span { display: inline-block; width: 14px; border-radius: 4px 4px 0 0; background: linear-gradient(180deg, #bfe0f5, #5b9bd5); transform-origin: bottom; height: 56px; }
+.in-view .freeze-bars span { animation: bar-freeze 1.6s var(--ease-expo) forwards; animation-delay: calc(var(--i) * 0.12s); }
+
+/* ---- 2. SILENCIO: ecualizador aplanándose ---- */
+@keyframes eq-settle {
+  0% { transform: scaleY(1); }
+  60% { transform: scaleY(0.55); }
+  100% { transform: scaleY(var(--eq, 0.14)); }
+}
+@keyframes eq-idle { 0%,100% { transform: scaleY(var(--eq, 0.14)); } 50% { transform: scaleY(calc(var(--eq, 0.14) + 0.08)); } }
+.eq-bars { display: flex; align-items: flex-end; gap: 5px; height: 56px; }
+.eq-bars span { width: 8px; height: 100%; border-radius: 3px; background: var(--grad-chrome); transform-origin: bottom; }
+.in-view .eq-bars span { animation: eq-settle 2s var(--ease-expo) forwards, eq-idle 3.4s ease-in-out 2s infinite; animation-delay: calc(var(--i) * 0.08s), calc(2s + var(--i) * 0.2s); }
+
+/* ---- 3. APP: dial del teléfono ---- */
+@keyframes dial-sweep { from { stroke-dashoffset: 232; } to { stroke-dashoffset: 60; } }
+.dial-ring { stroke-dasharray: 232; stroke-dashoffset: 232; }
+.in-view .dial-ring { animation: dial-sweep 2.4s var(--ease-expo) 0.4s forwards; }
+@keyframes wifi-pulse { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
+.in-view .wifi-arc { animation: wifi-pulse 2.4s ease-in-out infinite; }
+.in-view .wifi-arc:nth-child(2) { animation-delay: 0.3s; }
+.in-view .wifi-arc:nth-child(3) { animation-delay: 0.6s; }
+
+/* ---- 4. OZONO: burbujas subiendo ---- */
+@keyframes bubble-rise {
+  0% { transform: translateY(0) scale(0.6); opacity: 0; }
+  15% { opacity: 0.8; }
+  100% { transform: translateY(-84px) scale(1.15); opacity: 0; }
+}
+.bubbles { position: absolute; inset: 0; pointer-events: none; }
+.bubbles span { position: absolute; bottom: 8px; width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid rgba(91, 155, 213, 0.55); background: rgba(143, 190, 230, 0.15); opacity: 0; }
+.in-view .bubbles span { animation: bubble-rise 3.6s ease-in infinite; animation-delay: calc(var(--i) * 0.7s); }
+
+/* ---- 5. ACRÍLICO: sheen de luz barriendo ---- */
+@keyframes sheen-sweep { from { transform: translateX(-120%) skewX(-18deg); } to { transform: translateX(240%) skewX(-18deg); } }
+.sheen-box { position: relative; overflow: hidden; }
+.sheen-box::after { content: ""; position: absolute; inset: -20% auto -20% 0; width: 34%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.75), transparent); transform: translateX(-120%) skewX(-18deg); }
+.in-view .sheen-box::after { animation: sheen-sweep 3.2s var(--ease-expo) 0.6s infinite; }
+
+/* ---- 6. CE: pulso de escudo ---- */
+@keyframes shield-pulse { 0% { transform: scale(0.85); opacity: 0.8; } 100% { transform: scale(1.7); opacity: 0; } }
+.shield-wrap { position: relative; display: grid; place-items: center; width: 64px; height: 64px; }
+.shield-ring { position: absolute; inset: 0; border-radius: 50%; border: 1.5px solid var(--m-blue-400); opacity: 0; }
+.in-view .shield-ring { animation: shield-pulse 2.6s ease-out infinite; }
+.in-view .shield-ring:nth-child(2) { animation-delay: 1.3s; }
+
+/* ---- Sticky buy bar ---- */
+.sticky-buy { position: fixed; inset-x: 0; bottom: 0; z-index: 48; transform: translateY(110%); transition: transform 0.45s var(--ease-expo); 
+  background: linear-gradient(90deg, rgba(150,156,164,0.6) 0%, rgba(236,239,243,0.9) 22%, rgba(247,249,251,0.92) 50%, rgba(236,239,243,0.9) 78%, rgba(150,156,164,0.6) 100%);
+  backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 -8px 28px rgba(0,0,0,0.12); }
+.sticky-buy.show { transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .frost-svg path { stroke-dashoffset: 0 !important; animation: none !important; }
+  .freeze-bars span, .eq-bars span, .bubbles span, .wifi-arc, .shield-ring { animation: none !important; }
+  .in-view .freeze-bars span { transform: scaleY(var(--bh, 0.4)); }
+  .in-view .eq-bars span { transform: scaleY(var(--eq, 0.14)); }
+  .dial-ring { animation: none !important; stroke-dashoffset: 60 !important; }
+  .sheen-box::after { animation: none !important; }
+  .sticky-buy { transition: none; }
+}
+
+/* =====================================================================
+   BENTO v2 (diseño de Rafa en Claude Design — "Feature Cards Animated v2")
+   Dark premium, datos en vivo. Tokens y keyframes del design.
+   ===================================================================== */
+:root {
+  --mf-cold: #4c90c6;
+  --mf-heat: #c0392b;
+  --mf-cold-glow: rgba(76, 144, 198, 0.55);
+  --mf-heat-glow: rgba(192, 57, 43, 0.5);
+}
+@keyframes mfSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes mfSeq { 0% { opacity: 0.15; } 5% { opacity: 1; } 22% { opacity: 1; } 30% { opacity: 0.15; } 100% { opacity: 0.15; } }
+@keyframes mfPulseDot { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
+@keyframes mfStatusA { 0%, 42% { opacity: 1; } 50%, 92% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes mfStatusB { 0%, 42% { opacity: 0; } 50%, 92% { opacity: 1; } 100% { opacity: 0; } }
+.mf-spin { transform-box: fill-box; transform-origin: center; animation: mfSpin var(--mf-dur, 60s) linear infinite; }
+.mf-seq { animation: mfSeq 16s linear infinite; }
+.mf-pulse-dot { animation: mfPulseDot 2.4s ease-in-out infinite; }
+.mf-status-a { animation: mfStatusA 12s linear infinite; }
+.mf-status-b { animation: mfStatusB 12s linear infinite; }
+.bento2-card { background: #101013; border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 20px; padding: 18px 20px; display: flex; flex-direction: column; gap: 7px; min-height: 148px; }
+.bento2-label { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255, 255, 255, 0.4); }
+.bento2-title { font-family: var(--font-display); font-size: 17px; letter-spacing: -0.02em; line-height: 1.15; color: #fff; }
+.bento2-foot { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255, 255, 255, 0.35); }
+@media (prefers-reduced-motion: reduce) {
+  .mf-spin, .mf-seq, .mf-pulse-dot, .mf-status-a, .mf-status-b { animation: none !important; }
 }
