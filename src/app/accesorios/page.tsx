@@ -1,6 +1,63 @@
 import { PageShell } from "@/components/PageShell";
-import { SubHero, SectionHeader, FeatureCards, CTASection } from "@/components/blocks";
+import { SubHero, SectionHeader, CTASection } from "@/components/blocks";
 import { Reveal } from "@/components/Reveal";
+
+/* ─── Accesorios (venta) ─────────────────────────────────────────────────── */
+const accesoriosCards = [
+  {
+    title: "MFONE PRO DECK",
+    body: "El escalón de acceso diseñado para tu MF ONE. Eleva y estabiliza el setup; integración perfecta con el equipo.",
+    tag: "$6,900 MXN",
+    img: "/images/prodeck-negro.png",
+    contain: true,
+  },
+  {
+    title: "MF Mat",
+    body: "Tapete antideslizante para tu setup. Previene caídas al salir con los pies mojados.",
+    tag: "Consultar",
+    img: null,
+    contain: false,
+  },
+  {
+    title: "Soporte para celular",
+    body: "Se monta en el borde de la tina — tu timer, tu música o tu serie durante la inmersión.",
+    tag: "Consultar",
+    img: "/images/acc-soporte-celular.jpg",
+    contain: false,
+  },
+];
+
+/* ─── Kits de mantenimiento (estilo Plunge) ──────────────────────────────── */
+const kitsMantenimiento = [
+  {
+    title: "Filtro de 20 micrones",
+    body: "Cartucho reemplazable para el MF ONE — cámbialo una vez al mes.",
+    tag: "Consultar",
+    img: "/images/acc-filtro-cartucho-uno.jpg",
+    contain: false,
+  },
+  {
+    title: "Filtro de carbón",
+    body: "Se conecta a la manguera al llenar la tina — retiene impurezas desde el primer litro.",
+    tag: "Consultar",
+    img: "/images/acc-filtro-prellenado.jpg",
+    contain: false,
+  },
+  {
+    title: "Kit de filtros para inflables",
+    body: "Tres filtros de 1 a 5 micrones para MF Barrel y MF Horizon — cambia el filtro con cada cambio de agua.",
+    tag: "Consultar",
+    img: "/images/acc-filtros-cartucho.jpg",
+    contain: false,
+  },
+  {
+    title: "Oxidante Sirona",
+    body: "Tratamiento sin cloro que mantiene el agua impecable entre cambios.",
+    tag: "Próximamente",
+    img: null,
+    contain: false,
+  },
+];
 
 const maintenanceSchedule = [
   {
@@ -25,56 +82,91 @@ const maintenanceSchedule = [
   },
 ];
 
-const accessories = [
+const mfOneIncluded = [
   {
-    title: "MFONE PRO DECK",
-    body: "Plataforma oficial para el MF ONE. Eleva y estabiliza el setup; integración perfecta con el equipo.",
-    tag: "$6,900 MXN",
-    tone: "warm" as const,
+    title: "Filtro de 20 micrones",
+    body: "Cartuchos reemplazables de fácil acceso — cámbialo una vez al mes.",
+    img: "/images/acc-filtros-cartucho.jpg",
   },
   {
-    title: "MF Mat",
-    body: "Tapete antideslizante para tu setup. Previene caídas al salir con pies mojados y completa la experiencia visual. Recomendado.",
-    tag: "Consultar",
-    tone: "cool" as const,
+    title: "Filtro de carbón",
+    body: "Se conecta a la manguera al llenar la tina — retiene impurezas desde el primer litro.",
+    img: "/images/acc-filtro-prellenado.jpg",
   },
   {
-    title: "Kit de Filtros",
-    body: "Filtración de 3 etapas: filtro de papel, filtro metálico y red de protección. Cambiar con cada cambio de agua.",
-    tag: "Consultar",
-    tone: "ink" as const,
+    title: "Red de limpieza",
+    body: "Retira hojas e impurezas de la superficie en segundos.",
+    img: "/images/acc-red-limpieza.jpg",
   },
   {
-    title: "Cubierta protectora",
-    body: "Mantiene el agua limpia y conserva la temperatura entre sesiones. Compatible con todos los modelos MF.",
-    tag: "Consultar",
-    tone: "warm" as const,
+    title: "Soporte para celular",
+    body: "Se monta en el borde de la tina — tu timer, tu música o tu serie durante la inmersión.",
+    img: "/images/acc-soporte-celular.jpg",
   },
   {
-    title: "Cobertores para motores",
-    body: "Protección extra para uso en exterior. Evitan la exposición directa y prolongan la vida del motor.",
-    tag: "Consultar",
-    tone: "cool" as const,
+    title: "Patitos de hule",
+    body: "Sí, vienen incluidos. Porque el frío se toma en serio — pero no tanto.",
+    img: "/images/acc-patitos.jpg",
   },
   {
-    title: "Mochila de transporte",
-    body: "Para los modelos inflables Barrel y Horizon desinflados. Traslado fácil, protección total.",
-    tag: "Consultar",
-    tone: "ink" as const,
-  },
-  {
-    title: "Bomba de doble acción",
-    body: "Incluida con los modelos inflables. Lista en minutos para inflar tu tina sin esfuerzo.",
-    tag: "Consultar",
-    tone: "warm" as const,
-  },
-  {
-    title: "Kit de reparación",
-    body: "Para ajustes básicos de los modelos inflables. Mantén tu tina en condiciones óptimas en cualquier lugar.",
-    tag: "Consultar",
-    tone: "cool" as const,
+    title: "El kit completo",
+    body: "Todo lo que llega en la caja del MF ONE, listo desde el día uno.",
+    img: "/images/acc-kit-completo.jpg",
   },
 ];
+
+/* Card de producto con imagen (o placeholder) + chip de precio */
+function AccessoryGrid({
+  items,
+}: {
+  items: {
+    title: string;
+    body: string;
+    tag?: string;
+    img: string | null;
+    contain?: boolean;
+  }[];
+}) {
+  return (
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {items.map((item, i) => (
+        <Reveal key={item.title} delay={i * 0.06}>
+          <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-background">
+            <div className="grid aspect-[16/10] w-full place-items-center overflow-hidden bg-warm">
+              {item.img ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={item.img}
+                  alt={item.title}
+                  className={`h-full w-full transition-transform duration-500 hover:scale-[1.04] ${
+                    item.contain ? "object-contain p-8" : "object-cover"
+                  }`}
+                />
+              ) : (
+                <span className="rounded-full border border-dashed border-line px-4 py-1.5 text-[10px] uppercase tracking-[0.16em] text-ink-faint">
+                  Imagen próximamente
+                </span>
+              )}
+            </div>
+            <div className="flex flex-1 flex-col p-6">
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="text-lg font-semibold leading-snug text-foreground">
+                  {item.title}
+                </h3>
+                {item.tag && (
+                  <span className="mt-0.5 flex-none rounded-full bg-warm px-3 py-1 text-[11px] font-semibold text-ink-soft">
+                    {item.tag}
+                  </span>
+                )}
+              </div>
+              <p className="mt-2 text-sm leading-relaxed text-ink-soft">{item.body}</p>
+            </div>
+          </article>
+        </Reveal>
+      ))}
+    </div>
+  );
+}
 
 export default function AccesoriosPage() {
   return (
@@ -87,17 +179,66 @@ export default function AccesoriosPage() {
         tone="warm"
       />
 
-      {/* Catálogo de accesorios */}
-      <section id="catalogo" className="section-y bg-background">
+      {/* Accesorios */}
+      <section id="catalogo" className="section-y bg-background scroll-mt-20">
         <div className="container-edge">
           <SectionHeader
-            eyebrow="Tienda"
-            title="Accesorios y consumibles"
-            subtitle="Cada pieza está seleccionada para mantener la calidad del agua, la eficiencia del sistema y tu experiencia intacta."
+            eyebrow="Accesorios"
+            title="Completa tu setup."
+            subtitle="Piezas diseñadas para elevar la experiencia alrededor de tu cold plunge."
             center
             className="mb-12"
           />
-          <FeatureCards cards={accessories} columns={3} />
+          <AccessoryGrid items={accesoriosCards} />
+        </div>
+      </section>
+
+      {/* Kits de mantenimiento */}
+      <section id="mantenimiento" className="section-y bg-warm scroll-mt-20">
+        <div className="container-edge">
+          <SectionHeader
+            eyebrow="Kits de mantenimiento"
+            title="Agua impecable, siempre."
+            subtitle="Filtros y tratamientos para mantener tu agua cristalina entre cambios."
+            center
+            className="mb-12"
+          />
+          <AccessoryGrid items={kitsMantenimiento} />
+        </div>
+      </section>
+
+      {/* Incluido con el MF ONE */}
+      <section className="section-y bg-background">
+        <div className="container-edge">
+          <SectionHeader
+            eyebrow="Incluido con el MF ONE"
+            title="Lo que ya viene en la caja."
+            subtitle="Estos accesorios no se compran aparte: cada MF ONE los incluye de serie."
+            center
+            className="mb-12"
+          />
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {mfOneIncluded.map((item, i) => (
+              <Reveal key={item.title} delay={i * 0.06}>
+                <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-background">
+                  <div className="aspect-[16/10] w-full overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={item.img}
+                      alt={item.title}
+                      className="h-full w-full object-cover transition-transform duration-500 hover:scale-[1.04]"
+                    />
+                  </div>
+                  <div className="flex flex-1 flex-col p-6">
+                    <h3 className="text-lg font-semibold leading-snug text-foreground">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-ink-soft">{item.body}</p>
+                  </div>
+                </article>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 

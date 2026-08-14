@@ -82,7 +82,7 @@ const PRODUCTS = [
   },
   {
     name: "MF ONE",
-    image: "/images/prod-mfone.png",
+    image: "/images/prod-mfone.webp",
     price: "$169,000 MXN",
     body: "Diseño All-In-One con chiller integrado. Filtro de 20 micrones + ozono. Certificación CE. 1 año de garantía.",
     href: "/productos/mf-one",

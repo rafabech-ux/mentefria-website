@@ -79,7 +79,7 @@ export const showcase = {
       name: "MF ONE",
       tag: "All-In-One · chiller integrado · 1 año de garantía",
       price: "$169,000 MXN",
-      image: "/images/prod-mfone.png",
+      image: "/images/prod-mfone.webp",
       tone: "ink" as const,
     },
     {
@@ -131,7 +131,7 @@ export const statement = {
 
 export const gallery = [
   { caption: "MF ONE", image: "/images/hero-mfone.png", tone: "cool" as const },
-  { caption: "MF ONE · acabado", image: "/images/prod-mfone.png", tone: "ink" as const },
+  { caption: "MF ONE · acabado", image: "/images/prod-mfone.webp", tone: "ink" as const },
   { caption: "MF Horizon", image: "/images/prod-horizon.png", tone: "warm" as const },
   { caption: "MF Barrel", image: "/images/prod-barrel.png", tone: "cool" as const },
 ];

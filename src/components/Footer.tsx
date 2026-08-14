@@ -42,27 +42,6 @@ export function Footer() {
   return (
     <footer className="mfooter">
       <div className="mwrap">
-        <div className="mfooter-cta">
-          <h2>Mind over body.</h2>
-          <Link href="/productos/mf-one" className="mbtn mbtn-blue">
-            Compra el MF ONE
-          </Link>
-          <form className="mfooter-news" action="#">
-            <input
-              type="email"
-              placeholder="Tu correo electrónico"
-              aria-label="Correo electrónico"
-            />
-            <button
-              type="submit"
-              className="mbtn mbtn-blue !px-[22px] !py-[14px]"
-              aria-label="Suscribirme"
-            >
-              →
-            </button>
-          </form>
-        </div>
-
         <div className="mfooter-cols">
           <div>
             <Logo variant="white" className="h-6 w-auto" />

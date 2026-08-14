@@ -75,9 +75,9 @@ const PRODUCTOS = [
   {
     name: "MF ONE",
     price: "$169,000",
-    img: "/images/prod-mfone.png",
+    img: "/images/prod-mfone.webp",
     href: "/productos/mf-one",
-    scale: "100%",
+    scale: "90%",
     featured: true,
     bullets: ["Diseño All-In-One con chiller integrado.", "Filtro de 20 micrones + purificación por ozono.", "Control WiFi programable. Certificación CE. 1 año de garantía."],
   },

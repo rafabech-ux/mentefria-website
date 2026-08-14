@@ -18,32 +18,32 @@ import { Logo } from "@/components/Logo";
 const MEGA_PRODUCTS = [
   {
     name: "MF ONE",
-    img: "/images/prod-mfone.png",
+    img: "/images/prod-mfone.webp",
     blurb: "All-in-one con chiller integrado. La experiencia completa.",
     href: "/productos/mf-one",
-    scale: "100%",
+    scale: "100px",
   },
   {
     name: "MF HORIZON",
     img: "/images/prod-horizon-nobg.png",
     blurb: "Inflable premium horizontal. Frío serio, a tu manera.",
     href: "/productos/mf-horizon",
-    scale: "82%",
+    scale: "107px",
   },
   {
     name: "MF BARREL",
     img: "/images/prod-barrel-nobg.png",
     blurb: "El barril de inmersión clásico. Compacto y poderoso.",
     href: "/productos/mf-barrel",
-    scale: "55%",
+    scale: "116px",
   },
 ];
 
 const MEGA_LINKS = [
   { label: "Explora todos los plunges", href: "/productos", strong: true },
-  { label: "Accesorios y motores", href: "/accesorios" },
+  { label: "Accesorios", href: "/accesorios" },
+  { label: "Kits de mantenimiento", href: "/accesorios#mantenimiento" },
   { label: "Para negocios", href: "/#b2b" },
-  { label: "Prueba de 30 días", href: "/soporte" },
 ];
 
 export function Navbar({ solid: _solid = false }: { solid?: boolean }) {
@@ -80,14 +80,16 @@ export function Navbar({ solid: _solid = false }: { solid?: boolean }) {
                 <div className="invisible absolute inset-x-0 top-full z-50 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
                   <div className="mx-auto grid w-[min(960px,94vw)] grid-cols-[1fr_1fr_1fr_auto] gap-5 rounded-2xl border border-line bg-background p-6 text-foreground shadow-[0_24px_64px_rgba(8,9,11,0.24)]">
                     {MEGA_PRODUCTS.map((p) => (
-                      <Link key={p.name} href={p.href} className="group/card block">
+                      <Link key={p.name} href={p.href} className="group/card block min-w-0">
                         <div className="grid aspect-[4/3] place-items-center overflow-hidden rounded-xl bg-[var(--bg-panel)] p-4">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={p.img}
                             alt={p.name}
-                            style={{ width: p.scale }}
-                            className="max-h-full object-contain transition-transform duration-500 group-hover/card:scale-[1.05]"
+                            style={{ height: p.scale, translate: p.name === "MF HORIZON" ? "-20px 0" : undefined }}
+                            className={`w-auto object-contain transition-transform duration-500 group-hover/card:scale-[1.05] ${
+                              p.name === "MF HORIZON" ? "!max-w-none" : "max-w-full"
+                            }`}
                           />
                         </div>
                         <div className="mt-3 flex items-center justify-between">
@@ -170,7 +172,7 @@ export function Navbar({ solid: _solid = false }: { solid?: boolean }) {
 
         {/* Center: Mente Fria lockup */}
         <Link href="/" aria-label="Mente Fria" className="justify-self-center">
-          <Logo variant="black" className="h-7 w-auto" />
+          <Logo variant="black" className="h-9 w-auto" />
         </Link>
 
         {/* Right: account · search · cart */}

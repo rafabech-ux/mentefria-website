@@ -1,0 +1,352 @@
+# HANDOFF — Website Mente Fria
+
+> Documento de traspaso completo. Si estás leyendo esto, vas a continuar el desarrollo
+> de este sitio. Aquí está TODO el contexto: el plan, el sistema de diseño, las reglas,
+> el estado de cada página, los pendientes y los workflows. Léelo completo antes de
+> tocar código. Última actualización: 2026-07-15.
+
+---
+
+## 1. Qué es este proyecto (y qué NO es)
+
+Este repo es el **blueprint de diseño de alta fidelidad** del nuevo sitio de Mente Fria,
+construido en **Next.js 16**. NO es el sitio de producción final.
+
+**El plan completo, en orden:**
+
+1. **Origen — 3 builds separados que se combinaron en uno:**
+   - *mentefria.com actual (Shopify)* → aportó estructura, información, precios, flujo y copy real.
+   - *Clon Next.js de eightsleep.com* → aportó la base técnica y el esqueleto multi-página (13 rutas).
+   - *Diseño "site_v2" de Claude Design* → aportó la dirección visual: mundo metálico, liquid glass, azul hielo.
+2. **Fase actual (esta):** pulir el diseño página por página con Rafa, usando solo material
+   real de la marca (renders de fábrica, sesión lifestyle, manuales técnicos). El objetivo es
+   dejar el diseño **100% cerrado**.
+3. **Deploy actual:** GitHub (`rafabech-ux/mentefria-website`, público) + Netlify
+   (mentefria-website.netlify.app) con CI: push a `main` = build + deploy automático.
+   **Esto es solo un preview compartible / respaldo — NO se está "lanzando" nada ahí.**
+4. **Destino final:** tema custom de **Shopify Online Store 2.0 en Liquid**, construido desde
+   el Skeleton theme, siguiendo este blueprint pixel por pixel. **NO se convierte este código**
+   — se construye el Liquid nuevo usando este sitio como referencia visual exacta. El plan
+   técnico detallado del tema Liquid está en el vault:
+   `Mente Fria Brain/75 Reports/2026-05-31 - Website Build Plan - Custom Shopify Liquid Theme.md`
+   (tokens → 3 templates ancla → metaobjetos specs/FAQ → GSAP/Lenis → SEO/AEO es-MX).
+
+**Por qué Shopify Liquid y no headless:** checkout/inventario nativos, apps (suscripciones,
+reviews, widget WhatsApp de Respond.io) son app-blocks de Liquid, y el server-rendering es
+mejor para SEO/AEO.
+
+---
+
+## 2. Stack y comandos
+
+- Next.js 16 (App Router) · React 19 · TypeScript strict · Tailwind CSS v4 · shadcn/ui · Lucide
+- **Export estático**: `output: "export"` → carpeta `out/` (así lo publica Netlify)
+
+```bash
+npm run dev        # dev server (puerto 3000)
+npx tsc --noEmit   # typecheck rápido
+npm run build      # build de producción (lo mismo que corre Netlify)
+```
+
+**Gotcha #1 — Turbopack cache:** si el dev server sirve CSS/JS viejo después de editar
+(pasa seguido), el fix es `rm -rf .next` + reiniciar el server.
+
+**Gotcha #2 — archivo fantasma de tipos:** a veces aparece `.next/types/routes.d 2.ts`
+(duplicado con espacio) que rompe `tsc`. Bórralo: `rm -f ".next/types/routes.d 2.ts"`.
+
+---
+
+## 3. Sistema de diseño (el corazón de todo)
+
+Vive en **`src/app/metal.css`** (sistema "metal", portado del Claude Design site_v2) +
+`src/app/globals.css` (capa base tipo Eight Sleep). Referencias de nivel: **Apple × Plunge ×
+WHOOP × Eight Sleep**. Plunge es especialmente importante: **es el mismo proveedor/producto
+que el MF ONE**, así que su forma de vender (PDP, accesorios, comparativas) es directamente
+aplicable.
+
+### Colores (LOCKED — no cambiar sin Rafa)
+- **Acento principal**: azul hielo `#5B9BD5` (`--accent-ice` / `--m-blue`). Tonos: `--m-blue-600
+  #4a86c4` (sobre blanco), `--m-blue-400 #8fbee6` (sobre oscuro), `--m-blue-ice #6fa8dc`.
+- **Azul eléctrico `#001BFF`**: SOLO en gradientes y glows, nunca plano. (Es el azul oficial
+  de marca, pero en web se usa como "chispa", ej. el gradiente de StatSpark.)
+- **Bento/temperaturas**: frío `--mf-cold #4C90C6`, calor `--mf-heat #C0392B`. Números de
+  temperatura llevan color; unidades no-temperatura van en blanco.
+- Mundo neutro: plata/acero/cromo (gradientes `--grad-silver`, `--grad-steel`, `--grad-ink`),
+  tinta `#0b0c0e`, paneles claros `--bg-panel`.
+
+### Tipografía
+- **Aileron** (self-hosted) en todo. Display = clase `mdisplay` con
+  `WebkitTextStroke: var(--bold-stroke) currentColor` (0.5px — "Bold stroke" del design lock).
+- Eyebrows: `m-eyebrow accent` (uppercase, tracking ancho, azul hielo).
+
+### Componentes/clases clave de metal.css
+- `msection` / `mwrap` / `msection-head` — secciones y contenedores.
+- `panel` (fondo gris claro), `dark-s` (fondo gradiente ink oscuro — OJO: pinta el texto
+  interior de blanco por herencia; las cards blancas dentro necesitan `text-foreground`).
+- `mbtn` + variantes: `mbtn-primary` (negro), `mbtn-blue` (azul), `mbtn-ghost`.
+- `glass-nav` — navbar liquid glass (backdrop blur + gradiente cromado).
+- `stats-wrap` / `stats-grid` / `stat` con `.n .n-cold/.n-heat` — tiles de stats oscuros.
+
+### Patrones de diseño establecidos (reutilízalos, no inventes nuevos)
+- **Pop-out de producto**: panel gris como capa trasera (`absolute bottom-0 top-[45%]`),
+  producto PNG transparente flotando encima con `drop-shadow`, rompiendo el marco por arriba
+  (estilo WHOOP). Está en el landing (triángulo de productos) y en las cards de /productos.
+- **Cards de features con imagen full-bleed** + degradado oscuro abajo + título/copy encima
+  (estilo Plunge lineup) — en /productos "El mismo ADN en toda la línea".
+- **Grid lifestyle 4-up** con columnas pares desfasadas (`lg:translate-y-6`) — sección
+  "Mente Fria, en todas partes." en /productos, dividida por producto (Barrel/Horizon/ONE).
+- **Díptico interactivo frío/calor** (`FrioCalor.tsx`): dos fotos que "respiran" alternándose
+  cada 4s, hover expande, badges 0°C/40°C. En el PDP MF ONE.
+- **Bento animado** (`MfOneBento.tsx`): diseño de Rafa ("Feature Cards Animated v2" de Claude
+  Design), animaciones SVG en vivo con rAF. Sección sobre fondo BLANCO, cards negras.
+- **MotorPicker** (`src/components/MotorPicker.tsx`): comparador Motor Pro 2.0 vs Premium 2.0,
+  COMPARTIDO entre /productos, mf-barrel y mf-horizon — cualquier cambio ahí aplica a los 3.
+  Features alineados por fila: 1 enfriamiento · 2 filtración · 3 WiFi · 4 calefacción · 5 ozono.
+  Foto motor blanco en card Pro (izq), motor negro en Premium (der).
+- **StatSpark** (`src/components/StatSpark.tsx`): stats con count-up al scroll y números en
+  gradiente azul hielo→eléctrico; "0 hielos" cuenta HACIA ABAJO.
+- **Stretched link**: las cards de /productos son 100% clickeables (Link `absolute inset-0
+  z-[5]`; el botón va con `relative z-10`).
+
+### Gotchas de CSS aprendidos a golpes
+- `metal.css` tiene `img { max-width: 100% }` — para productos que deben desbordar usa
+  `!max-w-none flex-none`.
+- **`mix-blend-multiply` + z-index**: un `z-*` crea stacking context y AÍSLA el blend del
+  fondo (aparecen cajas blancas). No pongas z-index en imágenes con multiply.
+- **Sticky en grid**: la celda debe estar estirada (NO `self-start`) con un div interno
+  `lg:sticky lg:top-24`. Así funciona la galería sticky del PDP.
+- `scroll-behavior: smooth` global hace que la navegación entre páginas parezca scroll —
+  ya está resuelto, no lo regreses.
+- Los porcentajes de altura NO resuelven contra tiles con `aspect-ratio` (altura indefinida)
+  — usa px fijos (así están las alturas del mega-menú).
+
+---
+
+## 4. Reglas duras de negocio y contenido (NUNCA romperlas)
+
+1. **"Mente Fria" sin acento**, siempre. Decir **"cold plunge"**, no "tina helada"
+   ("el mejor cold plunge", masculino).
+2. **MF ONE nunca se combina con Motor Pro/Premium/Comercial** — es all-in-one con chiller
+   1 HP integrado. Los motores son SOLO para Barrel y Horizon.
+3. **No inventar datos.** Fuentes de verdad: manuales de fábrica archivados en
+   `Mente Fria Website/07 Product Docs/` (el vigente del MF ONE: "New Controller All-in-one
+   bathtub manual (110V&220V) 20260622.pdf") y el sitio vivo mentefria.com. Si un dato no
+   se puede verificar, se omite o se pone placeholder.
+4. **Specs MF ONE** (manual jun 2026): 0–40 °C · 3.5 kW · 195×80×71 cm · 420 L · ~135 kg ·
+   8,000 L/h (≈19× toda el agua/hora) · 68 dB(A) · R32 · filtro 20 micrones + skimmer inox ·
+   ozono · consumo 1.19 kW · 110V/16A · $169,000 MXN + IVA · garantía 1 año · envío $6,000.
+5. **Inflables** (sitio vivo, slugs `/products/mf-barrel-1` y `/products/mf-horizon-1`):
+   Barrel $69,000 (Ø90×90 cm, 400 L, 13 kg) · Horizon $74,000 (160×70×65 cm, 420 L, 15 kg) ·
+   PVC ultraduradero reforzado con fibra de vidrio (ya NO decir "drop-stitch grado militar") ·
+   3 filtros de 1–5 micrones · garantía 6 meses · envío $1,500 · incluyen: mochila, bomba
+   doble acción, cubierta con seguro para niños, filtros, kit de reparación.
+6. **Motores 2.0**: Pro = 0.8 HP/2,230 W, 25→3 °C en ~6 h, SIN calor ni ozono. Premium =
+   1 HP/2,700 W, 3–42 °C, ozono 24/7, ~4 h. Dimensiones 58.5×42.5×53 cm; 39 / 41.5 kg.
+7. **Decir "filtro de 20 micrones"**, no "cartucho plisado" (regla de Rafa).
+8. Comercial: 30 días de prueba · hasta 6 MSI Mercado Pago · WhatsApp +52 56 16 47 13 86
+   (wa.me/5215616471386). **"Agendar demo" = WhatsApp; "Comprar/Agregar al carrito" ≠ WhatsApp**
+   (apunta al producto del sitio vivo por ahora).
+9. B2B/leasing (de /negocios): 12 o 24 meses, anticipo 10%, comisión apertura 2%, residual 5%,
+   renta 100% deducible (siempre con disclaimer "según régimen fiscal — consulta a tu contador"),
+   propuesta <24 h, aprobación 3–7 días. Clientes/activaciones REALES para case studies:
+   **Hyrox Cancún 2026** (Recovery Zone oficial, Malecón Tajamar, carpa de atletas, ~20,000 L,
+   coach en sitio; CDMX en negociación), **Westin Santa Fe** (activación con creadores jun 2026),
+   **Casa Polanco** (60 días de inmersiones, ingreso por inmersión).
+10. El sitio vivo tiene contenido residual de "Edge Theory Labs" en el Centro de Ayuda —
+    **NUNCA reproducirlo**.
+11. La entidad legal no existe aún ("Mente Fría SA de CV" NO se escribe en ningún lado) —
+    persona física + marca IMPI.
+12. Sin números fabricados de reviews (no "4.9 estrellas / 1,240 reseñas" — eso se eliminó).
+
+---
+
+## 5. Estado página por página
+
+### `/` — Landing (`src/components/LandingV2.tsx`)
+Completo. Hero (eyebrow azul claro #8FBEE6), announcement bar ("HASTA 6 MESES SIN INTERESES ·
+PRUÉBALA 30 DÍAS SIN COMPROMISO"), features 0–40°, Ocho Razones, comparativa MF vs otras,
+trust compacto, **triángulo de productos** (Barrel 88% / ONE 90% featured / Horizon 137% con
+nudge — PNGs transparentes con pop-out), testimonios con video inline (sin lightbox),
+sección B2B, chat FAB de WhatsApp.
+
+### `/productos` (`src/app/productos/page.tsx`)
+Rehecha por completo:
+1. Header + 3 cards pop-out clickeables (orden: **Barrel → Horizon → ONE**), "Ver ahora",
+   fondo de sección **dark-s (negro)** — Rafa lo dejó en negro "por ahora, quizá cambie a
+   blanco después" (es 1 clase: `dark-s` ↔ `!bg-white`).
+2. "El mismo ADN en toda la línea." — 4 tiles de features con imagen; el de "Agua cristalina"
+   es un TRÍPTICO: filtro de carbón (vertical) | filtro 20 micrones | ozono (agua).
+3. `MotorPicker` (compartido) con chip "Solo para MF Barrel y MF Horizon — el MF ONE no
+   necesita motor".
+4. "Tecnología que se paga sola." + `StatSpark` animado.
+5. "Mente Fria, en todas partes." — 3 bloques de 4 fotos (Barrel/Horizon/ONE) con link a PDP.
+6. CTA oscuro final.
+
+### `/productos/mf-one` — PDP flagship
+Nivel Plunge, COMPLETO y aprobado por Rafa: hero con galería sticky (11 slides por color:
+frontal + 10 renders; slide 11 = cotas de dimensiones), buy box (color Negro/Blanco, add-on
+**MF ONE PRO DECK $6,900** estilo Plunge Basin con total dinámico, 4 acordeones, 3 trust
+cards), "La diferencia" (tiles oscuros + video 51MB gitignored), **bento animado**, "Accesorios
+incluidos" (9 cards, 5 con foto real de fábrica — filtros, filtro de carbón, red, soporte
+celular, patitos; 4 con placeholder), **díptico FrioCalor**, chiller "Siempre limpia. Siempre
+fría. Siempre lista." (caja 19× + 6 features en lista editorial con puntos azules), carrusel
+de beneficios, ficha técnica (20 filas, id `ficha-tecnica`), FAQ, **CTA final B2B claro**
+(estilo B2BBand: "¿Y si el MF ONE se pagara solo?" + stats 100%/12–24/<24h + "Cotiza para tu
+negocio"). SIN sticky buy bar (se eliminó a petición de Rafa).
+
+### `/productos/mf-barrel` y `/productos/mf-horizon`
+Construidos clonando la estructura del MF ONE (sin PRO DECK, sin B2B, sin bento): hero +
+buy box (1-2 fotos por color `pdp-*-{negro,blanco}.png`), "La diferencia" (Barrel: foto
+estudio con tapa; Horizon: foto del patio), `MotorPicker`, "Llévala a donde quieras."
+(portabilidad — Barrel: golf + retrato moody; Horizon: playa + van), accesorios incluidos
+(placeholders), beneficios, ficha, FAQ, CTA de compra. Contenido 100% del sitio vivo.
+
+### `/accesorios`
+Reestructurada: "Completa tu setup." (PRO DECK con foto, MF Mat placeholder, soporte celular)
+→ **"Agua impecable, siempre."** (id `mantenimiento`: filtro 20 micrones, filtro de carbón,
+kit filtros inflables, **Oxidante Sirona "Próximamente"** — espacio reservado estilo Plunge)
+→ "Lo que ya viene en la caja." (kit MF ONE con fotos) → calendario de mantenimiento → CTA.
+
+### Navbar (`src/components/Navbar.tsx`)
+Liquid glass + mega-menú WHOOP de Productos: 3 tiles (alturas px fijas: ONE 100px, Horizon
+107px con translate -20px, Barrel 116px) + columna de links: Explora todos los plunges /
+Accesorios / **Kits de mantenimiento** (→ /accesorios#mantenimiento) / Para negocios.
+Logo del nav a `h-9`.
+
+### Footer (`src/components/Footer.tsx`)
+Solo columnas de links + logo + bottom bar. El bloque "Mind over body + Compra el MF ONE +
+newsletter" se ELIMINÓ a petición de Rafa.
+
+### `/negocios`
+Funcional (hero, calculadora ROI id `roi`, verticales, leasing, proceso, FAQ, form id
+`cotizar`) pero tiene un **rework pendiente aprobado por Rafa** — ver Pendientes #1.
+
+### Otras (`/aprender`, `/atletas`, `/resenas`, `/blog`, `/soporte`, legales)
+Existen con contenido real pero **sin el restyle profundo** al sistema metal. Pendiente.
+
+---
+
+## 6. PENDIENTES (en orden de prioridad)
+
+1. **Rework de /negocios calcando la estructura de la página B2B de Plunge** (los "8 puntos
+   de Rafa"): ① hero con foto más luminosa (usar `/images/barrel-golf-wide.jpg` con overlay
+   ligero) ② segunda sección se queda ③ calculadora ROI con la MISMA matemática de Plunge +
+   **gráfica de ROI** (ingreso acumulado vs costo, breakeven marcado; adaptar a MXN/leasing)
+   ④ verticales en formato HORIZONTAL ⑤ esa sección se queda ⑥ **case studies de Hyrox
+   Cancún, Westin Santa Fe y Casa Polanco** (datos verificados en regla dura #9; Rafa dará
+   fotos reales de eventos) ⑦ proceso con números GRANDES en bold + flechas ⑧ FAQ con
+   tipografía más bold.
+2. **Comprimir videos** — falta `brew install ffmpeg`. Gitignored por peso (no llegan al
+   deploy): `mfone-diferencia.mp4` (51MB), testimoniales kevin/surf, video instalación.
+   También comprimir `reel-horizontal-01.mp4` (22MB, sí se sube).
+3. **Fotos faltantes**: accesorios con placeholder (tapa, skimmer, protector, app, MF Mat),
+   fotos de eventos B2B (Hyrox/Westin/Casa Polanco), portadas + videos correctos de
+   testimonios (Rafa los manda uno por uno; Dani y Máximo no tienen video).
+4. **Restyle profundo de subpáginas**: /aprender, /atletas, /resenas, /blog, /soporte,
+   legales — al sistema metal, con audit de contenido vs sitio vivo.
+5. **"PARA NEGOCIOS"** en el nav se parte en 2 líneas en ciertos anchos (flagged, sin fix).
+6. Barrel aparece **agotado** en el sitio vivo ("Próximamente más existencias") — decidir
+   con Rafa si el PDP muestra estado agotado.
+7. `_DSC02878.jpg` del shoot lifestyle está corrupto — pedir a Rafa re-descarga.
+8. **Eventual**: construir el tema Shopify Liquid (Acto 2 del plan).
+
+---
+
+## 7. Assets — dónde vive todo
+
+### En el repo (`public/`)
+- `images/` — todo optimizado con pipeline PIL (ver §8). Convenciones de nombre:
+  - `prod-*` = imágenes de producto para comparativas (`prod-mfone.webp` = frontal recortado
+    sin fondo, 60KB; `prod-*-nobg.png` = transparentes; `prod-mfone-nodeck.webp` = sin deck,
+    disponible pero no en uso).
+  - `pdp-*` = fotos por color de los PDPs inflables.
+  - `mfone-gallery/{negro,blanco}/front.jpg + 01..10.jpg` = galería PDP MF ONE (10 = cotas).
+  - `acc-*` = accesorios de fábrica. `barrel-* / horizon-*` = sesión lifestyle 2026.
+  - `motor-{blanco,negro}-studio.jpg` = motores (negro regradeado para quitar tinte cálido).
+  - `mfone-{frio,calor}.jpg` = fotos de marca azul/roja (díptico + features).
+- `videos/` — `original/` = clips scrapeados de mentefria.com (ligeros, en repo).
+  Los >50MB están **gitignored** (ver `.gitignore`) — pásalos a mano si cambias de máquina.
+
+### Fuera del repo — carpeta `Mente Fria/Mente Fria Website/` (assets originales, NO tocar sin archivar)
+- `07 Product Docs/` — manuales PDF oficiales (fuente de verdad de specs).
+- `Product Images/MFONE Renders Studio/{black,white}/` — renders originales de fábrica.
+- `Product Images/MFONE Accessories/` — fotos de accesorios de fábrica.
+- `Product Images/Lifestyle Shoot 2026/` — sesión DSC* original (13 fotos).
+- `Product Images/Studio Junio 2026/` — fotos frío/calor originales.
+- `03 Brand & Assets/Videos/` — MF ESTUDIO 01/02, MENTE FRIA X GUDSLIP (pesados, sin usar).
+- `06 Claude Design Export/` — export del diseño site_v2 original (referencia).
+- **Regla**: todo asset nuevo que mande Rafa → se archiva el original aquí Y se genera la
+  versión web optimizada en `public/images/`.
+
+### Conocimiento (fuera del repo)
+- **Vault Obsidian** `Mente Fria/Mente Fria Brain/` — cerebro del negocio (leer su CLAUDE.md).
+- `Mente Fria/CLAUDE.md` — instrucciones del proyecto para Claude.
+- Reporte del plan Liquid: `75 Reports/2026-05-31 - Website Build Plan...md`.
+
+---
+
+## 8. Workflows
+
+### Pipeline de imágenes (cada asset nuevo de Rafa)
+1. Archivar el original en `Mente Fria Website/Product Images/...`.
+2. Optimizar para web con Python/PIL: redimensionar (max ~1600-1800px), JPEG `quality=82-85,
+   optimize=True, progressive=True` (objetivo <400KB). Transparencias → WebP `quality=88`.
+3. Recortes/cutouts: flood-fill desde bordes para fondos uniformes (funciona con producto
+   oscuro sobre fondo claro; NO con blanco sobre blanco), bbox + margen.
+4. Verificar en preview antes de dar por bueno.
+
+### Verificación (cada cambio visual)
+Dev server corriendo → verificar por DOM/computed styles (los screenshots del preview a veces
+salen en blanco — glitch conocido; los datos del DOM son la fuente confiable) → typecheck →
+si es batch grande, `npm run build` completo antes de push.
+
+### Git / deploy
+- **Guardar = commit + push a `main`** (mensajes descriptivos en español, batch por sesión).
+- El push **auto-publica en Netlify** (CI: build `npm run build`, publish `out/`). Rafa está
+  OK con esto; no dedicar esfuerzo extra a Netlify (no verificar deploys salvo que se pida).
+- Credencial GitHub: keychain de la Mac de Rafa (usuario `rafabech-ux`). En otra máquina,
+  necesitas tu propio acceso al repo.
+- Si el push rebota (non-fast-forward): `git pull --rebase origin main` — ha habido sesiones
+  paralelas editando el repo.
+
+### Cómo trabaja Rafa (importante para la colaboración)
+- Feedback visual rápido, por screenshots anotados y dictado (a veces con typos de dictado —
+  "MF Viral" = MF Barrel, "lonk" = link). Iteración fina: "5% más grande", "un pelito a la
+  derecha" — se aplica, se verifica, se le muestra.
+- Español e inglés intercambiables. Directo, sin rodeos.
+- SIEMPRE etiquetar supuestos y reportar qué se verificó y qué falta.
+- Cuando pide algo que contradice un dato real, se le dice (ej. fotos de Horizon etiquetadas
+  como Barrel — él corrige con gusto).
+
+---
+
+## 9. Decisiones de diseño tomadas (para no re-litigarlas)
+
+- Fondo de la sección de productos en /productos: **negro** (dark-s) por decisión de Rafa
+  ("quizá lo cambie a blanco después").
+- Botones de cards de producto: **"Ver ahora"** (Rafa vetó "Comprar ahora"). Alternativas que
+  se le dieron por si quiere cambiar: Descúbrela / Conócela / Ver detalles / Explorar.
+- El mega-menú NO lleva "Prueba de 30 días" (eso es mensaje de conversión, vive en el
+  announcement bar) y dice "Accesorios" (no "Accesorios y motores").
+- Sticky buy bar del PDP: eliminado. Sección "Todo en una sola pieza": eliminada. Pre-footer
+  MIND OVER BODY con newsletter: eliminado.
+- El CTA final del PDP MF ONE es B2B (claro, estilo B2BBand del landing) — NO un CTA de compra.
+- Los PDPs de inflables NO mencionan al MF ONE, y viceversa (cada producto vende lo suyo).
+- Las 7 cajas de la sección chiller son oscuras (se probó claro y gris — Rafa eligió volver
+  al oscuro; las 6 features van en lista editorial sin cajas).
+- El hero con video en /productos se probó y se descartó (el video queda en el repo).
+
+---
+
+## 10. Checklist para arrancar (nuevo desarrollador)
+
+1. Clona el repo y corre `npm install && npm run dev` → http://localhost:3000.
+2. Lee este documento completo + `Mente Fria/CLAUDE.md` + el CLAUDE.md del vault.
+3. Recorre el sitio página por página comparando contra mentefria.com.
+4. Consigue de Rafa: la carpeta `Mente Fria Website/` (assets originales), los videos
+   gitignored, y acceso al repo GitHub.
+5. Primer trabajo sugerido: el rework de /negocios (Pendiente #1 — está completamente
+   especificado arriba).
+6. Ante CUALQUIER dato de producto: verifica contra los manuales de `07 Product Docs/` o el
+   sitio vivo. Ante cualquier duda de diseño: las referencias son Apple/Plunge/WHOOP/8Sleep
+   y los patrones del §3. Ante duda de negocio: pregunta a Rafa, no asumas.

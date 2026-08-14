@@ -3,9 +3,10 @@ import { PageShell } from "@/components/PageShell";
 import { FAQ } from "@/components/FAQ";
 import { Reveal } from "@/components/Reveal";
 import { ProductOptionsProvider, ProductStage, ColorPicker, AddonCard } from "@/components/ProductOptions";
+import { FrioCalor } from "@/components/FrioCalor";
 import { MfOneBento } from "@/components/MfOneBento";
 import { BenefitsCarousel } from "@/components/BenefitsCarousel";
-import { StickyBuyBar } from "@/components/StickyBuyBar";
+import { ArrowRight } from "@/components/icons";
 import { Layers, Filter, Zap, Smartphone, RotateCcw, ShieldCheck, CreditCard, Plus } from "lucide-react";
 
 /* ─────────────────────────────────────────────────────────────
@@ -54,7 +55,7 @@ const SPEC_ROWS = [
   { label: "Calentamiento", value: "Hasta 40 °C" },
   { label: "Rango de temperatura", value: "0 – 40 °C, al grado exacto" },
   { label: "Desinfección", value: "Ozono automático" },
-  { label: "Filtración", value: "Skimmer de acero inoxidable + cartucho plisado" },
+  { label: "Filtración", value: "Skimmer de acero inoxidable + filtro de 20 micrones" },
   { label: "Bomba de agua", value: "8,000 L/h" },
   { label: "Nivel de ruido", value: "68 dB(A) a 1 m" },
   { label: "Refrigerante", value: "R32 ecológico" },
@@ -85,8 +86,8 @@ export default function MFOnePage() {
           <div className="mwrap">
             <ProductOptionsProvider
               variants={[
-                { color: "Negro", images: Array.from({ length: 10 }, (_, i) => `/images/mfone-gallery/negro/${String(i + 1).padStart(2, "0")}.jpg`) },
-                { color: "Blanco", images: Array.from({ length: 10 }, (_, i) => `/images/mfone-gallery/blanco/${String(i + 1).padStart(2, "0")}.jpg`) },
+                { color: "Negro", images: ["/images/mfone-gallery/negro/front.jpg", ...Array.from({ length: 10 }, (_, i) => `/images/mfone-gallery/negro/${String(i + 1).padStart(2, "0")}.jpg`)] },
+                { color: "Blanco", images: ["/images/mfone-gallery/blanco/front.jpg", ...Array.from({ length: 10 }, (_, i) => `/images/mfone-gallery/blanco/${String(i + 1).padStart(2, "0")}.jpg`)] },
               ]}
             >
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-20">
@@ -163,7 +164,7 @@ export default function MFOnePage() {
                       },
                       {
                         t: "Qué incluye",
-                        c: "Tapa aislante térmica de 3 piezas, skimmer de acero inoxidable, filtro de cartucho plisado, protector de corriente con reset y acceso a la app de control WiFi. Todo en la caja, sin compras extra.",
+                        c: "Tapa aislante térmica de 3 piezas, skimmer de acero inoxidable, filtro de 20 micrones, protector de corriente con reset y acceso a la app de control WiFi. Todo en la caja, sin compras extra.",
                       },
                       {
                         t: "Envío y entrega",
@@ -279,12 +280,15 @@ export default function MFOnePage() {
             </Reveal>
             <Reveal className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {[
+                { t: "Filtro de 20 micrones", p: "Cartuchos reemplazables de fácil acceso — cámbialo una vez al mes.", img: "/images/acc-filtros-cartucho.jpg" },
+                { t: "Filtro de carbón", p: "Se conecta a la manguera al llenar la tina — retiene impurezas desde el primer litro.", img: "/images/acc-filtro-prellenado.jpg" },
+                { t: "Red de limpieza", p: "Retira hojas e impurezas de la superficie en segundos.", img: "/images/acc-red-limpieza.jpg" },
+                { t: "Soporte para celular", p: "Se monta en el borde de la tina — tu timer, tu música o tu serie durante la inmersión.", img: "/images/acc-soporte-celular.jpg" },
                 { t: "Tapa aislante térmica", p: "3 piezas rígidas — conserva la temperatura y mantiene el agua limpia.", img: null },
                 { t: "Skimmer de acero inoxidable", p: "Red integrada en la tina que atrapa impurezas — limpieza semanal en segundos.", img: null },
-                { t: "Filtro de cartucho plisado", p: "Cartucho reemplazable de fácil acceso desde la cubierta.", img: null },
                 { t: "Protector de corriente", p: "Enchufe con protección de fuga y reset — seguridad eléctrica de serie.", img: null },
-                { t: "Plug & Play", p: "Conéctalo a 110 V, llena con manguera y listo. Sin obra, sin plomería.", img: null },
                 { t: "App de control WiFi", p: "Temperatura, timers y modo automático desde tu celular.", img: null },
+                { t: "Patitos de hule", p: "Sí, vienen incluidos. Porque el frío se toma en serio — pero no tanto.", img: "/images/acc-patitos.jpg" },
               ].map((a) => (
                 <article key={a.t} className="overflow-hidden rounded-[16px] border border-[var(--line-1)] bg-[var(--m-white)]">
                   {/* Imagen del accesorio (o espacio reservado) */}
@@ -308,33 +312,11 @@ export default function MFOnePage() {
           </div>
         </section>
 
-        {/* ── 4. FULL-BLEED LIFESTYLE ─────────────────────────── */}
+        {/* ── 4. FRÍO / CALOR — díptico interactivo ───────────── */}
         <section className="msection">
           <div className="mwrap">
             <Reveal>
-              <div className="relative overflow-hidden rounded-[18px]">
-                <div className="relative aspect-[16/9] w-full">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/images/hero-mfone.png"
-                    alt="MF ONE en un espacio de recuperación"
-                    className="absolute inset-0 h-full w-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(8,9,11,0.82)] via-[rgba(8,9,11,0.28)] to-transparent" />
-                </div>
-                <div className="absolute inset-x-0 bottom-0 p-8 sm:p-12 lg:p-16">
-                  <h2
-                    className="mdisplay max-w-2xl text-[clamp(28px,4vw,52px)] text-white"
-                    style={{ WebkitTextStroke: "var(--bold-stroke) currentColor" }}
-                  >
-                    Frío. Calor. Un solo equipo.
-                  </h2>
-                  <p className="mt-3 max-w-lg text-[15px] leading-relaxed text-white/70">
-                    Los chorros de hidromasaje intensifican el efecto del frío — y también
-                    sirven en modo calor para hidroterapia. Zero Setup: sin obra, sin plomería.
-                  </p>
-                </div>
-              </div>
+              <FrioCalor />
             </Reveal>
           </div>
         </section>
@@ -362,18 +344,23 @@ export default function MFOnePage() {
                 </div>
 
                 {/* Features elegidos */}
-                <div className="mt-8 grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
+                <div className="mt-10 grid grid-cols-1 gap-x-10 sm:grid-cols-2">
                   {[
                     ["Timer programable", "Se enciende y apaga sola a tus horarios — dos programas."],
                     ["Modo automático", "Fijas tu temperatura y la mantiene 24/7, al grado."],
                     ["Ozono automático", "Esterilización sin cloro ni químicos."],
-                    ["Doble filtración", "Skimmer de acero inoxidable + cartucho plisado."],
+                    ["Doble filtración", "Skimmer de acero inoxidable + filtro de 20 micrones."],
                     ["Candado de pantalla", "Bloqueo del panel — ideal para uso comercial o niños."],
                     ["Luces LED", "Enciende y apaga la iluminación desde el panel."],
                   ].map(([t, d]) => (
-                    <div key={t} className="rounded-[14px] border border-[var(--on-dark-line)] bg-white/[0.03] p-4">
-                      <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--m-blue-400)]">{t}</div>
-                      <p className="mt-1 text-[13px] leading-relaxed text-[var(--on-dark-muted)]">{d}</p>
+                    <div key={t} className="border-t border-white/10 py-4">
+                      <div className="flex items-baseline gap-2.5">
+                        <span aria-hidden className="h-[7px] w-[7px] flex-none translate-y-[-1px] rounded-full bg-[var(--m-blue-400)]" />
+                        <div>
+                          <div className="text-[14px] font-semibold text-white">{t}</div>
+                          <p className="mt-0.5 text-[13px] leading-relaxed text-[var(--on-dark-muted)]">{d}</p>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -445,17 +432,6 @@ export default function MFOnePage() {
           </div>
         </section>
 
-        {/* ── 6. CLOSEUP ──────────────────────────────────────── */}
-        <section className="closeup">
-          <div className="glow" />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/photography/product/mf-one-white-studio.png" alt="MF ONE — detalle" />
-          <div className="cap">
-            <h2>Todo en una sola pieza.</h2>
-            <p>Chiller de 1 HP integrado. Silencioso. Sellado. Certificado CE.</p>
-          </div>
-        </section>
-
         {/* ── 7. FAQ ──────────────────────────────────────────── */}
         <section className="msection">
           <div className="mwrap">
@@ -467,27 +443,48 @@ export default function MFOnePage() {
           </div>
         </section>
 
-        {/* ── 8. CTA FINAL (dark) ─────────────────────────────── */}
-        <section className="msection dark-s">
-          <div className="mwrap text-center">
-            <Reveal>
-              <span className="m-eyebrow accent">Empieza hoy</span>
-              <h2
-                className="mdisplay mx-auto mt-4 max-w-[18ch] text-[clamp(34px,5vw,68px)]"
-                style={{ WebkitTextStroke: "var(--bold-stroke) currentColor" }}
-              >
-                Lleva el MF ONE a casa — $169,000 MXN
-              </h2>
-              <p className="mx-auto mt-5 max-w-[52ch] text-[15px] text-[var(--on-dark-muted)]">
-                Prueba 30 días sin preguntas. Garantía 1 año + atención de por vida. Hasta 6
-                MSI con Mercado Pago. Envío $6,000 MXN a todo México.
-              </p>
-              <div className="mt-9 flex flex-wrap justify-center gap-3">
-                <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="mbtn mbtn-blue">
-                  Comprar MF ONE
-                </a>
-                <Link href="/productos" className="mbtn mbtn-ghost on-dark text-white">
-                  Ver todos los productos
+        {/* ── 8. CTA FINAL — PARA NEGOCIOS (claro, estilo B2BBand) ── */}
+        <section className="bg-mist text-foreground">
+          <div className="container-edge section-y">
+            <Reveal className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
+              <div className="max-w-2xl">
+                <p className="eyebrow mb-4">Mente Fria para Negocios</p>
+                <h2 className="display-md">¿Y si el MF ONE se pagara solo?</h2>
+                <p className="body-lg mt-4">
+                  Hoteles, gimnasios, spas y clínicas ya cobran por cada inmersión.
+                  Adquiérelo en leasing sin tocar tu línea bancaria — y calcula en un
+                  minuto cuántas sesiones necesitas para recuperarlo.
+                </p>
+
+                {/* Stats */}
+                <div className="mt-8 grid max-w-xl grid-cols-1 gap-y-6 sm:grid-cols-3">
+                  {[
+                    ["100%", "renta deducible"],
+                    ["12–24", "meses de leasing"],
+                    ["<24 h", "propuesta en tu correo"],
+                  ].map(([n, l], i) => (
+                    <div key={l} className={i > 0 ? "sm:border-l sm:border-line sm:pl-6" : ""}>
+                      <div className="mdisplay text-[clamp(28px,3vw,40px)] leading-none text-[var(--accent-ice)]">
+                        {n}
+                      </div>
+                      <div className="mt-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
+                        {l}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex shrink-0 flex-col items-start gap-4 lg:items-end">
+                <Link href="/negocios" className="btn-pill btn-ink">
+                  Cotiza para tu negocio
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="/negocios#roi"
+                  className="text-[13px] font-semibold text-[var(--accent-ice)] transition-colors hover:text-[var(--m-blue-600)]"
+                >
+                  Calcular mi ROI →
                 </Link>
               </div>
             </Reveal>
@@ -495,7 +492,6 @@ export default function MFOnePage() {
         </section>
 
       </div>
-      <StickyBuyBar name="MF ONE" price="$169,000" href="https://mentefria.com/products/mf-one" />
     </PageShell>
   );
 }

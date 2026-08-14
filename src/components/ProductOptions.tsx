@@ -159,7 +159,7 @@ export function AddonCard({
               key={imgByColor[color]}
               src={imgByColor[color]}
               alt={name}
-              className="h-full w-full scale-[1.35] object-cover mix-blend-multiply duration-300 animate-in fade-in"
+              className="h-full w-full object-contain mix-blend-multiply duration-300 animate-in fade-in"
             />
           </div>
           <div className="min-w-0">

@@ -1,27 +1,26 @@
-import Image from "next/image";
 import Link from "next/link";
 import { PageShell } from "@/components/PageShell";
 import {
   SubHero,
   SectionHeader,
-  FeatureCards,
-  StatRow,
   CTASection,
 } from "@/components/blocks";
 import { Reveal } from "@/components/Reveal";
+import { MotorPicker } from "@/components/MotorPicker";
+import { StatSpark } from "@/components/StatSpark";
 import { ArrowRight } from "@/components/icons";
 
 /* ─── Product card data ─────────────────────────────────────────────────── */
 const tinas = [
   {
-    name: "MF ONE",
-    tag: "All-In-One · Chiller 1 HP integrado · 420 L",
-    tagline: "Diseño All-In-One con chiller integrado. Filtro de 20 micrones + ozono. LED interno/externo, chorros de hidromasaje. 1 año de garantía.",
-    specs: "200 × 80 × 75 cm · 135 kg · Acrílico + acero inoxidable",
-    price: "$169,000 MXN",
-    image: "/images/prod-mfone.png",
-    href: "/productos/mf-one",
-    badge: "Más vendido",
+    name: "MF Barrel",
+    tag: "Cilíndrica · 400 L · Ideal para departamentos",
+    tagline: "Sistema de 3 filtros + purificación por ozono. Control WiFi programable. Certificación CE. 6 meses de garantía.",
+    specs: "90 cm diámetro × 90 cm altura · 13 kg",
+    price: "$69,000 MXN",
+    image: "/images/prod-barrel-nobg.png",
+    href: "/productos/mf-barrel",
+    badge: null,
   },
   {
     name: "MF Horizon",
@@ -34,39 +33,23 @@ const tinas = [
     badge: null,
   },
   {
-    name: "MF Barrel",
-    tag: "Cilíndrica · 400 L · Ideal para departamentos",
-    tagline: "Sistema de 3 filtros + purificación por ozono. Control WiFi programable. Certificación CE. 6 meses de garantía.",
-    specs: "90 cm diámetro × 90 cm altura · 13 kg",
-    price: "$69,000 MXN",
-    image: "/images/prod-barrel-nobg.png",
-    href: "/productos/mf-barrel",
-    badge: null,
-  },
-];
-
-/* ─── Motor cards ────────────────────────────────────────────────────────── */
-const motorCards = [
-  {
-    title: "Motor Pro 2.0",
-    body: "0.8 HP (2,230 W) · Enfría de 25 °C a 3 °C en ~6 h · Filtración de 3 etapas · Control WiFi. Sin calefacción ni ozono. Ideal para quienes priorizan el frío intenso.",
-    tag: "Entrada",
-    tone: "cool" as const,
-  },
-  {
-    title: "Motor Premium 2.0",
-    body: "1 HP (2,700 W) · Rango completo 42 °C a 3 °C — enfría y calienta · Ozono 24/7 · Control WiFi · Enfría en ~4 h. Versatilidad total para recuperación avanzada.",
-    tag: "Más popular",
-    tone: "warm" as const,
-  },
+    name: "MF ONE",
+    tag: "All-In-One · Chiller 1 HP integrado · 420 L",
+    tagline: "Diseño All-In-One con chiller integrado. Filtro de 20 micrones + ozono. LED interno/externo, chorros de hidromasaje. 1 año de garantía.",
+    specs: "195 × 80 × 71 cm · 135 kg · Acrílico + acero inoxidable",
+    price: "$169,000 MXN",
+    image: "/images/prod-mfone.webp",
+    href: "/productos/mf-one",
+    badge: "Más vendido",
+  }
 ];
 
 /* ─── Page ────────────────────────────────────────────────────────────────── */
 export default function ProductosPage() {
   return (
     <PageShell>
-      {/* 1+2 · Discover-your-perfect-Plunge — título + productos de inmediato */}
-      <section className="msection panel !pt-[clamp(48px,7vh,90px)]">
+      {/* 1+2 · Discover-your-perfect-Plunge — título + productos (fondo blanco) */}
+      <section className="msection dark-s !pt-[clamp(48px,7vh,90px)]">
         <div className="mwrap">
           <Reveal className="msection-head !mb-14">
             <span className="m-eyebrow accent">Productos</span>
@@ -79,25 +62,39 @@ export default function ProductosPage() {
               <Reveal
                 key={tina.name}
                 delay={i * 90}
-                className="group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-[0_1px_2px_rgba(8,9,11,0.06)] transition-shadow duration-500 hover:shadow-[0_24px_48px_-20px_rgba(8,9,11,0.25)]"
+                className="group relative flex flex-col overflow-hidden rounded-2xl bg-white text-foreground shadow-[0_1px_2px_rgba(8,9,11,0.06)] transition-shadow duration-500 hover:shadow-[0_24px_48px_-20px_rgba(8,9,11,0.25)]"
               >
-                {/* Image stage — contain, nunca recortada */}
-                <div className="relative grid aspect-[4/3] w-full place-items-center overflow-hidden bg-[var(--bg-panel)] p-8">
-                  <Image
-                    src={tina.image}
-                    alt={tina.name}
-                    width={640}
-                    height={480}
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    style={{ width: tina.name === "MF ONE" ? "100%" : tina.name === "MF Horizon" ? "82%" : "55%" }}
-                    className="h-auto max-h-full object-contain transition-transform duration-500 group-hover:scale-[1.05]"
-                    priority={i === 0}
-                  />
-                  {tina.badge && (
-                    <span className="absolute left-4 top-4 rounded-full bg-foreground px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-background">
-                      {tina.badge}
-                    </span>
-                  )}
+                {/* Toda la card es clickeable (stretched link); el botón queda encima */}
+                <Link
+                  href={tina.href}
+                  aria-label={`Ver ${tina.name}`}
+                  className="absolute inset-0 z-[5]"
+                />
+                {/* Stage pop-out estilo inicio: panel gris detrás, producto
+                    flotando con sombra y rompiendo el marco por arriba */}
+                <div className="relative px-6 pt-6">
+                  <div className="absolute inset-x-6 bottom-0 top-[45%] rounded-[16px] bg-[var(--bg-panel)]">
+                    {tina.badge && (
+                      <span className="absolute bottom-3 left-3 z-20 rounded-full bg-foreground px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-background">
+                        {tina.badge}
+                      </span>
+                    )}
+                  </div>
+                  <div className="relative flex min-h-[270px] items-end justify-center pb-8">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={tina.image}
+                      alt={tina.name}
+                      style={
+                        tina.name === "MF Horizon"
+                          ? { width: "115%", maxWidth: "none", translate: "10px -8px" }
+                          : tina.name === "MF ONE"
+                            ? { width: "95%" }
+                            : undefined
+                      }
+                      className="h-auto max-h-[210px] w-auto max-w-full flex-none object-contain drop-shadow-[0_22px_28px_rgba(8,9,11,0.22)] transition-transform duration-500 group-hover:scale-[1.04]"
+                    />
+                  </div>
                 </div>
 
                 {/* Card body — estilo Plunge */}
@@ -115,9 +112,9 @@ export default function ProductosPage() {
                   </p>
                   <p className="mt-3 text-sm leading-relaxed text-ink-soft">{tina.tagline}</p>
                   <p className="mt-2 flex-1 text-xs text-ink-faint">{tina.specs}</p>
-                  <div className="mt-6">
+                  <div className="relative z-10 mt-6">
                     <Link href={tina.href} className="mbtn mbtn-primary w-full justify-center">
-                      Comprar ahora
+                      Ver ahora
                     </Link>
                   </div>
                 </div>
@@ -127,29 +124,105 @@ export default function ProductosPage() {
         </div>
       </section>
 
-      {/* 3 · Motores */}
-      <section className="section-y bg-warm">
-        <div className="container-edge">
-          <Reveal className="mb-12">
-            <SectionHeader
-              eyebrow="Motores"
-              title="El corazón del sistema."
-              subtitle="Motores 3× más poderosos que cualquier otro en México. Enfrían y calientan sin hielo — el MF ONE ya incluye el chiller integrado."
-            />
-          </Reveal>
-
-          <FeatureCards cards={motorCards} columns={2} />
-
-          <Reveal delay={160}>
-            <p className="mt-6 text-center text-xs text-ink-faint">
-              * El MF ONE incluye chiller 1 HP integrado. No requiere motor adicional.
+      {/* 2.5 · Features con imagen — estilo Plunge lineup */}
+      <section className="msection">
+        <div className="mwrap">
+          <Reveal className="msection-head">
+            <span className="m-eyebrow accent">Lo que hace la diferencia</span>
+            <h2>El mismo ADN en toda la línea.</h2>
+            <p>
+              Frío real sin hielo, agua siempre limpia y control total desde tu
+              celular — elijas el modelo que elijas.
             </p>
           </Reveal>
+          <div className="grid gap-5 sm:grid-cols-2">
+            {[
+              {
+                t: "Frío de verdad, sin hielo",
+                p: "El MF ONE baja hasta 0 °C; los inflables hasta 3 °C con motores de la línea 2.0. Cero bolsas de hielo, para siempre.",
+                img: "/images/mfone-frio.jpg",
+                pos: "center 30%",
+              },
+              {
+                t: "Modo calor incluido",
+                p: "Contraste frío-calor en el mismo equipo: hasta 40 °C en el MF ONE y 42 °C con Motor Premium 2.0.",
+                img: "/images/mfone-calor.jpg",
+                pos: "center 30%",
+              },
+              {
+                t: "Agua cristalina, sin químicos",
+                p: "Tres sistemas trabajando juntos. En el MF ONE, la bomba recircula toda el agua ~19 veces por hora.",
+                triptych: [
+                  { img: "/images/acc-filtro-carbon-vert.jpg", cap: "Filtro de carbón", bg: "#91b3cf" },
+                  { img: "/images/acc-filtro-cartucho-uno.jpg", cap: "Filtro 20 micrones", bg: null },
+                  { img: "/images/ozono-agua.jpg", cap: "Ozono", bg: null },
+                ],
+              },
+              {
+                t: "Control total desde tu celular",
+                p: "WiFi + app en toda la línea: temperatura exacta, timers programables y modo automático 24/7.",
+                img: "/images/mfone-gallery/negro/09.jpg",
+                pos: "center",
+              },
+            ].map((f, i) => (
+              <Reveal key={f.t} delay={i * 80}>
+                <article className="group relative h-[340px] overflow-hidden rounded-[18px] sm:h-[400px]">
+                  {"triptych" in f && f.triptych ? (
+                    /* Tres sistemas de purificación, lado a lado */
+                    <div className="absolute inset-0 flex">
+                      {f.triptych.map((s) => (
+                        <div
+                          key={s.cap}
+                          className="relative min-w-0 flex-1 overflow-hidden"
+                          style={s.bg ? { background: s.bg } : undefined}
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={s.img}
+                            alt={s.cap}
+                            className={`absolute inset-0 h-full w-full transition-transform duration-700 group-hover:scale-[1.05] ${
+                              s.bg ? "object-contain px-3 py-14" : "object-cover"
+                            }`}
+                          />
+                          <span className="absolute left-1/2 top-4 z-10 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/20 bg-black/35 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur-md">
+                            {s.cap}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      src={f.img}
+                      alt={f.t}
+                      style={{ objectPosition: f.pos }}
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05]"
+                    />
+                  )}
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[rgba(8,9,11,0.82)] via-[rgba(8,9,11,0.22)] to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-7">
+                    <h3
+                      className="mdisplay text-[22px] text-white sm:text-[26px]"
+                      style={{ WebkitTextStroke: "var(--bold-stroke) currentColor" }}
+                    >
+                      {f.t}
+                    </h3>
+                    <p className="mt-2 max-w-[46ch] text-[13.5px] leading-relaxed text-white/75">
+                      {f.p}
+                    </p>
+                  </div>
+                </article>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
+      {/* 3 · Motores — comparador compartido (mismo de los PDPs inflables) */}
+      <MotorPicker />
+
       {/* 4 · Por qué Mente Fria — StatRow */}
-      <section className="section-y bg-background">
+      <section className="section-y !pt-0 bg-background">
         <div className="container-edge">
           <Reveal className="mb-12 text-center container-prose mx-auto">
             <SectionHeader
@@ -160,22 +233,85 @@ export default function ProductosPage() {
             />
           </Reveal>
 
-          <StatRow
-            stats={[
-              {
-                value: "3×",
-                label: "más potentes que cualquier otro motor en México",
-              },
-              {
-                value: "0 hielos",
-                label: "ahorro real a largo plazo",
-              },
-              {
-                value: "30 días",
-                label: "de prueba sin preguntas",
-              },
-            ]}
-          />
+          <StatSpark />
+        </div>
+      </section>
+
+      {/* 4.5 · Mente Fria en todas partes — banda lifestyle */}
+      <section className="msection panel">
+        <div className="mwrap">
+          <Reveal className="msection-head">
+            <span className="m-eyebrow accent">Comunidad</span>
+            <h2>Mente Fria, en todas partes.</h2>
+            <p>
+              Más de 100 instalaciones activas en casas, clubes, hoteles y spas
+              de todo México.
+            </p>
+          </Reveal>
+          {[
+            {
+              name: "MF Barrel",
+              href: "/productos/mf-barrel",
+              photos: [
+                { img: "/images/barrel-golf-wide.jpg", alt: "MF Barrel en un club de golf", pos: "center" },
+                { img: "/images/barrel-retrato-moody.jpg", alt: "Inmersión en frío en un MF Barrel", pos: "center 30%" },
+                { img: "/images/barrel-golf-close.jpg", alt: "MF Barrel — detalle en el club", pos: "center" },
+                { img: "/images/barrel-studio-tapa.jpg", alt: "MF Barrel en estudio con cubierta térmica", pos: "center" },
+              ],
+            },
+            {
+              name: "MF Horizon",
+              href: "/productos/mf-horizon",
+              photos: [
+                { img: "/images/horizon-playa.jpg", alt: "MF Horizon frente al mar", pos: "center 60%" },
+                { img: "/images/horizon-patio.jpg", alt: "MF Horizon en un patio en casa", pos: "center" },
+                { img: "/images/horizon-playa-van.jpg", alt: "MF Horizon de viaje con la van", pos: "center" },
+                { img: "/images/horizon-closeup-perfil.jpg", alt: "Inmersión en un MF Horizon", pos: "center 30%" },
+              ],
+            },
+            {
+              name: "MF ONE",
+              href: "/productos/mf-one",
+              photos: [
+                { img: "/images/mfone-frio.jpg", alt: "MF ONE en modo frío", pos: "center 30%" },
+                { img: "/images/mfone-calor.jpg", alt: "MF ONE en modo calor", pos: "center 30%" },
+                { img: "/images/mfone-gallery/negro/01.jpg", alt: "MF ONE negro — render de estudio", pos: "center" },
+                { img: "/images/mfone-gallery/blanco/front.jpg", alt: "MF ONE blanco — frente", pos: "center" },
+              ],
+            },
+          ].map((group, gi) => (
+            <div key={group.name} className={gi > 0 ? "mt-16" : ""}>
+              <Reveal className="mb-6 flex items-baseline justify-between gap-4">
+                <h3
+                  className="mdisplay text-[clamp(20px,2.2vw,28px)]"
+                  style={{ WebkitTextStroke: "var(--bold-stroke) currentColor" }}
+                >
+                  {group.name}
+                </h3>
+                <Link
+                  href={group.href}
+                  className="flex-none text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--accent-ice)] transition-colors hover:text-[var(--m-blue-600)]"
+                >
+                  Ver ahora →
+                </Link>
+              </Reveal>
+              <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-5">
+                {group.photos.map((g, i) => (
+                  <Reveal key={g.img} delay={i * 80} className={i % 2 === 1 ? "lg:translate-y-6" : ""}>
+                    <figure className="group overflow-hidden rounded-[18px]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={g.img}
+                        alt={g.alt}
+                        style={{ objectPosition: g.pos }}
+                        className="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-[1.05] sm:h-[260px] lg:h-[300px]"
+                      />
+                    </figure>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 

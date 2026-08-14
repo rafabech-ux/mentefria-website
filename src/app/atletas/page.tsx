@@ -199,7 +199,7 @@ export default function AtletasPage() {
             <Reveal>
               <div className="relative rounded-3xl overflow-hidden aspect-[4/5] bg-gradient-to-br from-black/10 to-black/30">
                 <Image
-                  src="/images/prod-mfone.png"
+                  src="/images/prod-mfone.webp"
                   alt="MF ONE tina de inmersión en frío"
                   fill
                   className="object-cover"
