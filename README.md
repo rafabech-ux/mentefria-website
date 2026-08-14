@@ -1,10 +1,9 @@
 # Mente Fria — Sitio web
 
-Sitio de marketing y e-commerce de **Mente Fria**, marca mexicana premium de tinas de inmersión en frío (cold plunge). Proyecto de la materia **Negocios Inteligentes y Comercio Digital** (AI-101 Free-Stack Agentic Builder Studio), Universidad Iberoamericana, Verano 2026.
+Sitio de marketing y e-commerce de **Mente Fria**, marca mexicana premium de tinas de inmersión en frío (cold plunge).
 
-- **Alumno:** Rafael Becherano Chiprut (232870-3)
-- **Profesora:** Patricia Navarro Rojas
 - **Sitio en vivo:** https://mentefria-website.netlify.app
+- **Traspaso / contexto completo del proyecto:** ver [HANDOFF.md](HANDOFF.md)
 
 ## Qué es
 
